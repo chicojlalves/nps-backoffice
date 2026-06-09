@@ -7,7 +7,7 @@ import { createClient } from '@/lib/supabase/client'
 import { canManageCompanies, canManageStores, canManageUsers } from '@/lib/permissions'
 import {
   LayoutDashboard, Building2, Store, Users,
-  LogOut, BarChart3, Menu, X,
+  LogOut, BarChart3, Menu, X, UserCircle,
 } from 'lucide-react'
 
 export default function Sidebar({ profile }) {
@@ -88,7 +88,8 @@ export default function Sidebar({ profile }) {
 
         {/* User + Logout */}
         <div className="border-t border-white/5 p-2 flex flex-col gap-1">
-          <div className="flex items-center gap-3 px-2 py-2 overflow-hidden">
+          <Link href="/perfil"
+            className={`flex items-center gap-3 px-2 py-2 rounded-lg hover:bg-white/5 transition-colors overflow-hidden ${pathname === '/perfil' ? 'bg-blue-600/20' : ''}`}>
             <div className="flex-shrink-0 w-8 h-8 rounded-full bg-slate-700 flex items-center justify-center text-xs font-bold text-slate-300">
               {initials}
             </div>
@@ -96,7 +97,7 @@ export default function Sidebar({ profile }) {
               <span className="text-xs font-semibold text-slate-200 truncate">{profile.nome}</span>
               <span className="text-xs text-slate-500 capitalize">{profile.role}</span>
             </div>
-          </div>
+          </Link>
           <button onClick={handleLogout}
             className="flex items-center gap-3 px-2 py-2 rounded-lg text-slate-500 hover:text-red-400 hover:bg-red-500/10 transition-colors overflow-hidden">
             <LogOut size={18} className="flex-shrink-0" />
@@ -148,7 +149,8 @@ export default function Sidebar({ profile }) {
 
             {/* User + Logout */}
             <div className="border-t border-white/5 p-3 flex flex-col gap-1">
-              <div className="flex items-center gap-3 px-3 py-2">
+              <Link href="/perfil" onClick={() => setMobileOpen(false)}
+                className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/5 transition-colors">
                 <div className="w-8 h-8 rounded-full bg-slate-700 flex items-center justify-center text-xs font-bold text-slate-300 flex-shrink-0">
                   {initials}
                 </div>
@@ -156,7 +158,7 @@ export default function Sidebar({ profile }) {
                   <span className="text-xs font-semibold text-slate-200 truncate">{profile.nome}</span>
                   <span className="text-xs text-slate-500 capitalize">{profile.role}</span>
                 </div>
-              </div>
+              </Link>
               <button onClick={handleLogout}
                 className="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-400 hover:text-red-400 hover:bg-red-500/10 transition-colors">
                 <LogOut size={18} />
