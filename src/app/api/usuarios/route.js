@@ -1,6 +1,7 @@
 import { createClient as createAdmin } from '@supabase/supabase-js'
 import { createClient } from '@/lib/supabase/server'
 import { canManageUsers } from '@/lib/permissions'
+import { logAction } from '@/lib/audit'
 
 async function getAuthenticatedProfile() {
   const supabase = await createClient()
@@ -52,6 +53,15 @@ export async function POST(request) {
       await admin.auth.admin.deleteUser(authData.user.id)
       return Response.json({ error: 'Erro ao criar perfil: ' + profileError.message }, { status: 500 })
     }
+
+    await logAction({
+      user_id: (await (await createClient()).auth.getUser()).data.user?.id,
+      user_nome: (await getAuthenticatedProfile())?.role,
+      action: 'CREATE_USER',
+      table_name: 'profiles',
+      record_id: profileData.id,
+      new_data: { nome, email, role, company_id, store_id },
+    })
 
     return Response.json({ usuario: profileData }, { status: 201 })
   } catch (err) {
@@ -107,8 +117,20 @@ export async function DELETE(request) {
       process.env.SUPABASE_SERVICE_ROLE_KEY
     )
 
+    const { data: deletedProfile } = await admin.from('profiles').select('nome, role').eq('id', id).single()
+
     const { error } = await admin.auth.admin.deleteUser(id)
     if (error) return Response.json({ error: error.message }, { status: 500 })
+
+    const currentProfile = await getAuthenticatedProfile()
+    await logAction({
+      user_id: (await (await createClient()).auth.getUser()).data.user?.id,
+      user_nome: currentProfile?.role,
+      action: 'DELETE_USER',
+      table_name: 'profiles',
+      record_id: id,
+      old_data: deletedProfile ?? null,
+    })
 
     return Response.json({ ok: true })
   } catch (err) {
