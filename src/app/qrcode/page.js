@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
+import { headers } from 'next/headers'
 import QrCodeClient from './QrCodeClient'
 
 export default async function QrCodePage({ searchParams }) {
@@ -21,7 +22,13 @@ export default async function QrCodePage({ searchParams }) {
     .eq('id', store_id)
     .single()
 
-  const pesquisaUrl = `${process.env.NEXT_PUBLIC_APP_URL}/pesquisa?store=${store_id}&company=${company_id}`
+  // Pega a URL base dos headers da requisição — funciona em qualquer ambiente
+  const headersList = await headers()
+  const host = headersList.get('host')
+  const proto = headersList.get('x-forwarded-proto') ?? 'https'
+  const baseUrl = `${proto}://${host}`
+
+  const pesquisaUrl = `${baseUrl}/pesquisa?store=${store_id}&company=${company_id}`
 
   return (
     <QrCodeClient
