@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
-import { BarChart3, Download, ExternalLink } from 'lucide-react'
+import { BarChart3, Download, ExternalLink, Printer } from 'lucide-react'
 import QRCode from 'qrcode'
 
 export default function QrCodeClient({ loja, pesquisaUrl }) {
@@ -24,6 +24,10 @@ export default function QrCodeClient({ loja, pesquisaUrl }) {
     link.download = `qrcode-${loja?.nome ?? 'loja'}.png`
     link.href = canvas.toDataURL('image/png')
     link.click()
+  }
+
+  function handlePrint() {
+    window.print()
   }
 
   return (
@@ -54,21 +58,28 @@ export default function QrCodeClient({ loja, pesquisaUrl }) {
           </p>
 
           {/* Ações */}
-          <div className="flex flex-col gap-2 w-full">
+          <div className="flex flex-col gap-2 w-full print:hidden">
             <button
               onClick={handleDownload}
               className="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-xl py-3 text-sm transition-colors"
             >
               <Download size={16} />
-              Baixar QR Code
+              Baixar imagem
+            </button>
+            <button
+              onClick={handlePrint}
+              className="flex items-center justify-center gap-2 bg-[#0f1117] border border-white/10 text-slate-300 hover:text-white rounded-xl py-3 text-sm transition-colors"
+            >
+              <Printer size={16} />
+              Imprimir
             </button>
             <a
               href={pesquisaUrl}
               target="_blank"
               rel="noreferrer"
-              className="flex items-center justify-center gap-2 border border-white/10 text-slate-400 hover:text-white rounded-xl py-3 text-sm transition-colors"
+              className="flex items-center justify-center gap-2 text-slate-500 hover:text-slate-300 text-sm transition-colors py-1"
             >
-              <ExternalLink size={16} />
+              <ExternalLink size={14} />
               Abrir pesquisa
             </a>
           </div>

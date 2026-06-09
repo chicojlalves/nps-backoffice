@@ -17,13 +17,30 @@ function npsColor(nps) {
   return 'text-rose-400'
 }
 
+const PRESETS = [
+  { label: 'Hoje', days: 0 },
+  { label: '7 dias', days: 6 },
+  { label: '30 dias', days: 29 },
+  { label: '90 dias', days: 89 },
+]
+
+function dateAgo(days) {
+  return new Date(Date.now() - days * 24 * 60 * 60 * 1000).toISOString().slice(0, 10)
+}
+
 export default function DashboardClient({ profile, lojas }) {
   const today = new Date().toISOString().slice(0, 10)
-  const weekAgo = new Date(Date.now() - 6 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10)
 
-  const [from, setFrom] = useState(weekAgo)
+  const [from, setFrom] = useState(dateAgo(6))
   const [to, setTo] = useState(today)
+  const [preset, setPreset] = useState('7 dias')
   const [storeId, setStoreId] = useState('0')
+
+  function applyPreset(p) {
+    setPreset(p.label)
+    setFrom(dateAgo(p.days))
+    setTo(today)
+  }
   const [data, setData] = useState(null)
   const [loading, setLoading] = useState(true)
   const [lastUpdate, setLastUpdate] = useState(null)
@@ -71,46 +88,67 @@ export default function DashboardClient({ profile, lojas }) {
       </div>
 
       {/* Filtros */}
-      <div className="bg-[#151820] border border-white/5 rounded-2xl p-4 mb-6 flex flex-wrap gap-3 items-end">
-        <div className="flex flex-col gap-1">
-          <label className="text-xs text-slate-500">De</label>
-          <input
-            type="date"
-            value={from}
-            onChange={e => setFrom(e.target.value)}
-            className="bg-[#0f1117] border border-white/10 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
-        <div className="flex flex-col gap-1">
-          <label className="text-xs text-slate-500">Até</label>
-          <input
-            type="date"
-            value={to}
-            onChange={e => setTo(e.target.value)}
-            className="bg-[#0f1117] border border-white/10 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
-        {lojas.length > 0 && (
-          <div className="flex flex-col gap-1">
-            <label className="text-xs text-slate-500">Loja</label>
-            <select
-              value={storeId}
-              onChange={e => setStoreId(e.target.value)}
-              className="bg-[#0f1117] border border-white/10 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+      <div className="bg-[#151820] border border-white/5 rounded-2xl p-4 mb-6 flex flex-col gap-4">
+        {/* Presets */}
+        <div className="flex items-center gap-2 flex-wrap">
+          {PRESETS.map(p => (
+            <button
+              key={p.label}
+              onClick={() => applyPreset(p)}
+              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+                preset === p.label
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-[#0f1117] border border-white/10 text-slate-400 hover:text-white'
+              }`}
             >
-              <option value="0">Todas</option>
-              {lojas.map(l => <option key={l.id} value={l.id}>{l.nome}</option>)}
-            </select>
+              {p.label}
+            </button>
+          ))}
+          <span className="text-slate-700 text-xs ml-1">ou escolha um período</span>
+        </div>
+
+        {/* Datas + loja + botão */}
+        <div className="flex flex-wrap gap-3 items-end">
+          <div className="flex flex-col gap-1">
+            <label className="text-xs text-slate-500">De</label>
+            <input
+              type="date"
+              value={from}
+              onChange={e => { setFrom(e.target.value); setPreset('') }}
+              className="bg-[#0f1117] border border-white/10 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
           </div>
-        )}
-        <button
-          onClick={load}
-          disabled={loading}
-          className="flex items-center gap-2 bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white text-sm font-medium px-4 py-2 rounded-xl transition-colors"
-        >
-          <RefreshCw size={14} className={loading ? 'animate-spin' : ''} />
-          Atualizar
-        </button>
+          <div className="flex flex-col gap-1">
+            <label className="text-xs text-slate-500">Até</label>
+            <input
+              type="date"
+              value={to}
+              onChange={e => { setTo(e.target.value); setPreset('') }}
+              className="bg-[#0f1117] border border-white/10 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+          {lojas.length > 0 && (
+            <div className="flex flex-col gap-1">
+              <label className="text-xs text-slate-500">Loja</label>
+              <select
+                value={storeId}
+                onChange={e => setStoreId(e.target.value)}
+                className="bg-[#0f1117] border border-white/10 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="0">Todas</option>
+                {lojas.map(l => <option key={l.id} value={l.id}>{l.nome}</option>)}
+              </select>
+            </div>
+          )}
+          <button
+            onClick={load}
+            disabled={loading}
+            className="flex items-center gap-2 bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white text-sm font-medium px-4 py-2 rounded-xl transition-colors"
+          >
+            <RefreshCw size={14} className={loading ? 'animate-spin' : ''} />
+            Atualizar
+          </button>
+        </div>
       </div>
 
       {/* KPIs */}

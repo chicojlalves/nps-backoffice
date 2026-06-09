@@ -2,17 +2,41 @@
 
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
-import { Building2, Plus, X } from 'lucide-react'
+import { Building2, Plus, X, Pencil, Trash2 } from 'lucide-react'
+
+const EMPTY = { nome: '', cnpj: '', email: '', responsavel: '', telefone: '' }
 
 export default function EmpresasClient({ empresas: inicial }) {
   const [empresas, setEmpresas] = useState(inicial)
   const [showForm, setShowForm] = useState(false)
+  const [editing, setEditing] = useState(null) // empresa sendo editada
+  const [showConfirm, setShowConfirm] = useState(null) // id para excluir
   const [loading, setLoading] = useState(false)
   const [erro, setErro] = useState('')
-  const [form, setForm] = useState({ nome: '', cnpj: '', email: '', responsavel: '', telefone: '' })
+  const [form, setForm] = useState(EMPTY)
 
   function handleChange(e) {
     setForm(f => ({ ...f, [e.target.name]: e.target.value }))
+  }
+
+  function openCreate() {
+    setEditing(null)
+    setForm(EMPTY)
+    setErro('')
+    setShowForm(true)
+  }
+
+  function openEdit(empresa) {
+    setEditing(empresa)
+    setForm({
+      nome: empresa.nome ?? '',
+      cnpj: empresa.cnpj ?? '',
+      email: empresa.email ?? '',
+      responsavel: empresa.responsavel ?? '',
+      telefone: empresa.telefone ?? '',
+    })
+    setErro('')
+    setShowForm(true)
   }
 
   async function handleSubmit(e) {
@@ -27,22 +51,40 @@ export default function EmpresasClient({ empresas: inicial }) {
     setLoading(true)
     const supabase = createClient()
 
-    const { data, error } = await supabase
-      .from('companies')
-      .insert({ ...form })
-      .select()
-      .single()
+    if (editing) {
+      const { data, error } = await supabase
+        .from('companies')
+        .update({ ...form })
+        .eq('id', editing.id)
+        .select()
+        .single()
 
-    setLoading(false)
+      setLoading(false)
+      if (error) { setErro('Erro ao atualizar empresa.'); return }
+      setEmpresas(prev => prev.map(e => e.id === editing.id ? data : e))
+    } else {
+      const { data, error } = await supabase
+        .from('companies')
+        .insert({ ...form })
+        .select()
+        .single()
 
-    if (error) {
-      setErro('Erro ao cadastrar empresa.')
-      return
+      setLoading(false)
+      if (error) { setErro('Erro ao cadastrar empresa.'); return }
+      setEmpresas(prev => [data, ...prev])
     }
 
-    setEmpresas(prev => [data, ...prev])
-    setForm({ nome: '', cnpj: '', email: '', responsavel: '', telefone: '' })
     setShowForm(false)
+    setEditing(null)
+    setForm(EMPTY)
+  }
+
+  async function handleDelete(id) {
+    const supabase = createClient()
+    const { error } = await supabase.from('companies').delete().eq('id', id)
+    if (error) { alert('Erro ao excluir empresa.'); return }
+    setEmpresas(prev => prev.filter(e => e.id !== id))
+    setShowConfirm(null)
   }
 
   return (
@@ -54,7 +96,7 @@ export default function EmpresasClient({ empresas: inicial }) {
           <p className="text-slate-500 text-sm mt-1">{empresas.length} empresa{empresas.length !== 1 ? 's' : ''} cadastrada{empresas.length !== 1 ? 's' : ''}</p>
         </div>
         <button
-          onClick={() => setShowForm(true)}
+          onClick={openCreate}
           className="flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white text-sm font-medium px-4 py-2.5 rounded-xl transition-colors"
         >
           <Plus size={16} />
@@ -62,12 +104,12 @@ export default function EmpresasClient({ empresas: inicial }) {
         </button>
       </div>
 
-      {/* Modal de cadastro */}
+      {/* Modal criar/editar */}
       {showForm && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
           <div className="bg-[#151820] border border-white/10 rounded-2xl w-full max-w-md p-6">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-lg font-bold text-white">Nova empresa</h2>
+              <h2 className="text-lg font-bold text-white">{editing ? 'Editar empresa' : 'Nova empresa'}</h2>
               <button onClick={() => setShowForm(false)} className="text-slate-500 hover:text-white transition-colors">
                 <X size={20} />
               </button>
@@ -95,28 +137,47 @@ export default function EmpresasClient({ empresas: inicial }) {
               ))}
 
               {erro && (
-                <p className="text-red-400 text-sm bg-red-500/10 border border-red-500/20 rounded-xl px-4 py-3">
-                  {erro}
-                </p>
+                <p className="text-red-400 text-sm bg-red-500/10 border border-red-500/20 rounded-xl px-4 py-3">{erro}</p>
               )}
 
               <div className="flex gap-3 mt-2">
-                <button
-                  type="button"
-                  onClick={() => setShowForm(false)}
-                  className="flex-1 border border-white/10 text-slate-400 hover:text-white rounded-xl py-2.5 text-sm transition-colors"
-                >
+                <button type="button" onClick={() => setShowForm(false)}
+                  className="flex-1 border border-white/10 text-slate-400 hover:text-white rounded-xl py-2.5 text-sm transition-colors">
                   Cancelar
                 </button>
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="flex-1 bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white font-semibold rounded-xl py-2.5 text-sm transition-colors"
-                >
-                  {loading ? 'Salvando...' : 'Salvar'}
+                <button type="submit" disabled={loading}
+                  className="flex-1 bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white font-semibold rounded-xl py-2.5 text-sm transition-colors">
+                  {loading ? 'Salvando...' : editing ? 'Salvar alterações' : 'Salvar'}
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Modal confirmação de exclusão */}
+      {showConfirm && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-[#151820] border border-white/10 rounded-2xl w-full max-w-sm p-6">
+            <div className="flex flex-col items-center gap-4 text-center">
+              <div className="w-12 h-12 bg-rose-500/10 border border-rose-500/20 rounded-full flex items-center justify-center">
+                <Trash2 size={20} className="text-rose-400" />
+              </div>
+              <div>
+                <h3 className="text-white font-bold text-lg">Excluir empresa?</h3>
+                <p className="text-slate-500 text-sm mt-1">Todas as lojas e respostas vinculadas também serão excluídas. Essa ação não pode ser desfeita.</p>
+              </div>
+              <div className="flex gap-3 w-full">
+                <button onClick={() => setShowConfirm(null)}
+                  className="flex-1 border border-white/10 text-slate-400 hover:text-white rounded-xl py-2.5 text-sm transition-colors">
+                  Cancelar
+                </button>
+                <button onClick={() => handleDelete(showConfirm)}
+                  className="flex-1 bg-rose-600 hover:bg-rose-500 text-white font-semibold rounded-xl py-2.5 text-sm transition-colors">
+                  Excluir
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       )}
@@ -139,6 +200,7 @@ export default function EmpresasClient({ empresas: inicial }) {
                 <th className="text-left text-xs font-medium text-slate-500 px-6 py-4 hidden sm:table-cell">Responsável</th>
                 <th className="text-left text-xs font-medium text-slate-500 px-6 py-4 hidden md:table-cell">E-mail</th>
                 <th className="text-left text-xs font-medium text-slate-500 px-6 py-4 hidden lg:table-cell">Telefone</th>
+                <th className="text-right text-xs font-medium text-slate-500 px-6 py-4">Ações</th>
               </tr>
             </thead>
             <tbody>
@@ -158,6 +220,18 @@ export default function EmpresasClient({ empresas: inicial }) {
                   <td className="px-6 py-4 hidden sm:table-cell text-sm text-slate-300">{e.responsavel}</td>
                   <td className="px-6 py-4 hidden md:table-cell text-sm text-slate-400">{e.email}</td>
                   <td className="px-6 py-4 hidden lg:table-cell text-sm text-slate-400">{e.telefone || '–'}</td>
+                  <td className="px-6 py-4 text-right">
+                    <div className="flex items-center justify-end gap-2">
+                      <button onClick={() => openEdit(e)}
+                        className="p-1.5 text-slate-500 hover:text-blue-400 hover:bg-blue-500/10 rounded-lg transition-colors">
+                        <Pencil size={14} />
+                      </button>
+                      <button onClick={() => setShowConfirm(e.id)}
+                        className="p-1.5 text-slate-500 hover:text-rose-400 hover:bg-rose-500/10 rounded-lg transition-colors">
+                        <Trash2 size={14} />
+                      </button>
+                    </div>
+                  </td>
                 </tr>
               ))}
             </tbody>
