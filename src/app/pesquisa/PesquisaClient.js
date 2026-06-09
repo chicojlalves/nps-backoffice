@@ -105,27 +105,14 @@ export default function PesquisaClient({ store_id, company_id, atendentes }) {
               </p>
             </div>
 
-            {/* Botões de nota — grid para garantir espaço em mobile */}
-            <div className="grid grid-cols-6 sm:grid-cols-11 gap-2 mb-3">
-              {SCORES.slice(0, 6).map(n => (
+            {/* Botões de nota */}
+            <div className="flex flex-wrap justify-center gap-2 mb-3">
+              {SCORES.map(n => (
                 <button
                   key={n}
                   type="button"
                   onClick={() => setScore(n)}
-                  className={`aspect-square w-full rounded-xl border-2 font-bold text-base sm:text-sm transition-all touch-manipulation ${
-                    score === n ? scoreColorActive(n) : scoreColor(n)
-                  }`}
-                >
-                  {n}
-                </button>
-              ))}
-              {/* linha dois no mobile, continua no desktop */}
-              {SCORES.slice(6).map(n => (
-                <button
-                  key={n}
-                  type="button"
-                  onClick={() => setScore(n)}
-                  className={`aspect-square w-full rounded-xl border-2 font-bold text-base sm:text-sm transition-all touch-manipulation ${
+                  className={`w-12 h-12 sm:w-11 sm:h-11 rounded-xl border-2 font-bold text-base sm:text-sm transition-all touch-manipulation flex-shrink-0 ${
                     score === n ? scoreColorActive(n) : scoreColor(n)
                   }`}
                 >
