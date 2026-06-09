@@ -1,0 +1,282 @@
+'use client'
+
+import { useState } from 'react'
+import { createClient } from '@/lib/supabase/client'
+import { Users, Plus, X } from 'lucide-react'
+
+const ROLES = [
+  { value: 'proprietario', label: 'Proprietário(a)', needsStore: false },
+  { value: 'supervisor', label: 'Supervisor(a)', needsStore: true },
+  { value: 'gerente', label: 'Gerente', needsStore: true },
+  { value: 'atendente', label: 'Atendente', needsStore: true },
+]
+
+const roleColors = {
+  admin:       'bg-blue-500/10 text-blue-400 border-blue-500/20',
+  proprietario:'bg-violet-500/10 text-violet-400 border-violet-500/20',
+  supervisor:  'bg-amber-500/10 text-amber-400 border-amber-500/20',
+  gerente:     'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
+  atendente:   'bg-slate-500/10 text-slate-400 border-slate-500/20',
+}
+
+export default function UsuariosClient({ usuarios: inicial, empresas, lojas, profile }) {
+  const [usuarios, setUsuarios] = useState(inicial)
+  const [showForm, setShowForm] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [erro, setErro] = useState('')
+  const [form, setForm] = useState({
+    nome: '',
+    email: '',
+    senha: '',
+    role: '',
+    company_id: profile.company_id ?? '',
+    store_id: profile.store_id ?? '',
+  })
+
+  const lojasFiltradas = lojas.filter(l => l.company_id === form.company_id)
+  const roleAtual = ROLES.find(r => r.value === form.role)
+  const precisaLoja = roleAtual?.needsStore ?? true
+
+  function handleChange(e) {
+    const { name, value } = e.target
+    setForm(f => ({
+      ...f,
+      [name]: value,
+      ...(name === 'company_id' ? { store_id: '' } : {}),
+    }))
+  }
+
+  async function handleSubmit(e) {
+    e.preventDefault()
+    setErro('')
+
+    if (!form.nome || !form.email || !form.senha || !form.role || !form.company_id) {
+      setErro('Preencha todos os campos obrigatórios.')
+      return
+    }
+    if (precisaLoja && !form.store_id) {
+      setErro('Selecione uma loja para este perfil.')
+      return
+    }
+    if (form.senha.length < 6) {
+      setErro('A senha deve ter pelo menos 6 caracteres.')
+      return
+    }
+
+    setLoading(true)
+
+    // Cria usuário via API route (precisa de service role key no servidor)
+    const res = await fetch('/api/usuarios', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(form),
+    })
+
+    const json = await res.json()
+    setLoading(false)
+
+    if (!res.ok) {
+      setErro(json.error || 'Erro ao cadastrar usuário.')
+      return
+    }
+
+    setUsuarios(prev => [json.usuario, ...prev])
+    setForm({ nome: '', email: '', senha: '', role: '', company_id: profile.company_id ?? '', store_id: '' })
+    setShowForm(false)
+  }
+
+  return (
+    <div>
+      {/* Header */}
+      <div className="flex items-center justify-between mb-8">
+        <div>
+          <h1 className="text-2xl font-bold text-white">Usuários</h1>
+          <p className="text-slate-500 text-sm mt-1">{usuarios.length} usuário{usuarios.length !== 1 ? 's' : ''} cadastrado{usuarios.length !== 1 ? 's' : ''}</p>
+        </div>
+        <button
+          onClick={() => setShowForm(true)}
+          className="flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white text-sm font-medium px-4 py-2.5 rounded-xl transition-colors"
+        >
+          <Plus size={16} />
+          Novo usuário
+        </button>
+      </div>
+
+      {/* Modal */}
+      {showForm && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-[#151820] border border-white/10 rounded-2xl w-full max-w-md p-6 max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-lg font-bold text-white">Novo usuário</h2>
+              <button onClick={() => setShowForm(false)} className="text-slate-500 hover:text-white transition-colors">
+                <X size={20} />
+              </button>
+            </div>
+
+            <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+              {/* Nome */}
+              <div className="flex flex-col gap-1.5">
+                <label className="text-xs font-medium text-slate-400">Nome *</label>
+                <input
+                  name="nome"
+                  value={form.nome}
+                  onChange={handleChange}
+                  placeholder="Nome completo"
+                  className="bg-[#0f1117] border border-white/10 rounded-xl px-4 py-2.5 text-white placeholder-slate-600 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+                />
+              </div>
+
+              {/* Email */}
+              <div className="flex flex-col gap-1.5">
+                <label className="text-xs font-medium text-slate-400">E-mail *</label>
+                <input
+                  name="email"
+                  type="email"
+                  value={form.email}
+                  onChange={handleChange}
+                  placeholder="usuario@empresa.com"
+                  className="bg-[#0f1117] border border-white/10 rounded-xl px-4 py-2.5 text-white placeholder-slate-600 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+                />
+              </div>
+
+              {/* Senha */}
+              <div className="flex flex-col gap-1.5">
+                <label className="text-xs font-medium text-slate-400">Senha *</label>
+                <input
+                  name="senha"
+                  type="password"
+                  value={form.senha}
+                  onChange={handleChange}
+                  placeholder="Mínimo 6 caracteres"
+                  className="bg-[#0f1117] border border-white/10 rounded-xl px-4 py-2.5 text-white placeholder-slate-600 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+                />
+              </div>
+
+              {/* Perfil */}
+              <div className="flex flex-col gap-1.5">
+                <label className="text-xs font-medium text-slate-400">Perfil *</label>
+                <select
+                  name="role"
+                  value={form.role}
+                  onChange={handleChange}
+                  className="bg-[#0f1117] border border-white/10 rounded-xl px-4 py-2.5 text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+                >
+                  <option value="">Selecione…</option>
+                  {ROLES.map(r => (
+                    <option key={r.value} value={r.value}>{r.label}</option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Empresa */}
+              <div className="flex flex-col gap-1.5">
+                <label className="text-xs font-medium text-slate-400">Empresa *</label>
+                <select
+                  name="company_id"
+                  value={form.company_id}
+                  onChange={handleChange}
+                  disabled={!!profile.company_id}
+                  className="bg-[#0f1117] border border-white/10 rounded-xl px-4 py-2.5 text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition disabled:opacity-50"
+                >
+                  <option value="">Selecione…</option>
+                  {empresas.map(c => (
+                    <option key={c.id} value={c.id}>{c.nome}</option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Loja — só aparece quando o perfil precisa */}
+              {precisaLoja && (
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-medium text-slate-400">Loja *</label>
+                  <select
+                    name="store_id"
+                    value={form.store_id}
+                    onChange={handleChange}
+                    disabled={!!profile.store_id}
+                    className="bg-[#0f1117] border border-white/10 rounded-xl px-4 py-2.5 text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition disabled:opacity-50"
+                  >
+                    <option value="">Selecione…</option>
+                    {lojasFiltradas.map(l => (
+                      <option key={l.id} value={l.id}>{l.nome}</option>
+                    ))}
+                  </select>
+                </div>
+              )}
+
+              {erro && (
+                <p className="text-red-400 text-sm bg-red-500/10 border border-red-500/20 rounded-xl px-4 py-3">
+                  {erro}
+                </p>
+              )}
+
+              <div className="flex gap-3 mt-2">
+                <button
+                  type="button"
+                  onClick={() => setShowForm(false)}
+                  className="flex-1 border border-white/10 text-slate-400 hover:text-white rounded-xl py-2.5 text-sm transition-colors"
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="flex-1 bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white font-semibold rounded-xl py-2.5 text-sm transition-colors"
+                >
+                  {loading ? 'Salvando...' : 'Salvar'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Lista */}
+      {usuarios.length === 0 ? (
+        <div className="bg-[#151820] border border-white/5 rounded-2xl p-12 flex flex-col items-center gap-3 text-center">
+          <div className="w-12 h-12 bg-slate-800 rounded-2xl flex items-center justify-center">
+            <Users size={22} className="text-slate-500" />
+          </div>
+          <p className="text-slate-400 font-medium">Nenhum usuário cadastrado</p>
+          <p className="text-slate-600 text-sm">Clique em "Novo usuário" para começar</p>
+        </div>
+      ) : (
+        <div className="bg-[#151820] border border-white/5 rounded-2xl overflow-hidden">
+          <table className="w-full">
+            <thead>
+              <tr className="border-b border-white/5">
+                <th className="text-left text-xs font-medium text-slate-500 px-6 py-4">Usuário</th>
+                <th className="text-left text-xs font-medium text-slate-500 px-6 py-4">Perfil</th>
+                <th className="text-left text-xs font-medium text-slate-500 px-6 py-4 hidden sm:table-cell">Empresa</th>
+                <th className="text-left text-xs font-medium text-slate-500 px-6 py-4 hidden md:table-cell">Loja</th>
+              </tr>
+            </thead>
+            <tbody>
+              {usuarios.map((u, i) => (
+                <tr key={u.id} className={`${i !== usuarios.length - 1 ? 'border-b border-white/5' : ''} hover:bg-white/[0.02] transition-colors`}>
+                  <td className="px-6 py-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-full bg-slate-700 flex items-center justify-center text-xs font-bold text-slate-300 flex-shrink-0">
+                        {u.nome.split(' ').slice(0, 2).map(n => n[0]).join('').toUpperCase()}
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium text-white">{u.nome}</p>
+                      </div>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4">
+                    <span className={`text-xs font-medium px-2.5 py-1 rounded-full border capitalize ${roleColors[u.role] ?? roleColors.atendente}`}>
+                      {u.role}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 hidden sm:table-cell text-sm text-slate-400">{u.companies?.nome ?? '–'}</td>
+                  <td className="px-6 py-4 hidden md:table-cell text-sm text-slate-400">{u.stores?.nome ?? '–'}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </div>
+  )
+}
