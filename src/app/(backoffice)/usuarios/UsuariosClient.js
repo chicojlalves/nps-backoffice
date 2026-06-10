@@ -143,9 +143,13 @@ export default function UsuariosClient({ usuarios: inicial, empresas, lojas, pro
           <h1 className="text-2xl font-bold text-white">Usuários</h1>
           <p className="text-slate-500 text-sm mt-1">
             {usuarios.length} usuário{usuarios.length !== 1 ? 's' : ''} cadastrado{usuarios.length !== 1 ? 's' : ''}
-            {limiteUsuarios !== null && (
+            {limiteUsuarios !== null ? (
               <span className="ml-2 text-xs text-slate-600">
                 ({usuarios.length}/{limiteUsuarios} no plano {plano})
+              </span>
+            ) : (
+              <span className="ml-2 text-xs text-slate-600">
+                (plano {plano} — ilimitado)
               </span>
             )}
           </p>

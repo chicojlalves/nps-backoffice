@@ -99,9 +99,13 @@ export default function LojasClient({ lojas: inicial, empresas, profile, limiteL
           <h1 className="text-2xl font-bold text-white">Lojas</h1>
           <p className="text-slate-500 text-sm mt-1">
             {lojas.length} loja{lojas.length !== 1 ? 's' : ''} cadastrada{lojas.length !== 1 ? 's' : ''}
-            {limiteLojas !== null && (
+            {limiteLojas !== null ? (
               <span className="ml-2 text-xs text-slate-600">
                 ({lojas.length}/{limiteLojas} no plano {plano})
+              </span>
+            ) : (
+              <span className="ml-2 text-xs text-slate-600">
+                (plano {plano} — ilimitado)
               </span>
             )}
           </p>
