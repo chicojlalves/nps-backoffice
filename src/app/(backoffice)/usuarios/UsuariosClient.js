@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Users, Plus, X, Pencil, Trash2 } from 'lucide-react'
+import { Users, Plus, X, Pencil, Trash2, TrendingUp } from 'lucide-react'
 
 const ROLES = [
   { value: 'proprietario', label: 'Proprietário(a)', needsStore: false },
@@ -20,7 +20,7 @@ const roleColors = {
 
 const EMPTY_FORM = { nome: '', email: '', senha: '', role: '', company_id: '', store_id: '' }
 
-export default function UsuariosClient({ usuarios: inicial, empresas, lojas, profile }) {
+export default function UsuariosClient({ usuarios: inicial, empresas, lojas, profile, limiteUsuarios, plano }) {
   const [usuarios, setUsuarios] = useState(inicial)
   const [showForm, setShowForm] = useState(false)
   const [editing, setEditing] = useState(null)
@@ -59,6 +59,8 @@ export default function UsuariosClient({ usuarios: inicial, empresas, lojas, pro
     setShowForm(true)
   }
 
+  const atingiuLimite = limiteUsuarios !== null && usuarios.length >= limiteUsuarios
+
   async function handleSubmit(e) {
     e.preventDefault()
     setErro('')
@@ -73,6 +75,10 @@ export default function UsuariosClient({ usuarios: inicial, empresas, lojas, pro
     }
     if (!editing && form.senha.length < 6) {
       setErro('A senha deve ter pelo menos 6 caracteres.')
+      return
+    }
+    if (!editing && atingiuLimite) {
+      setErro(`Seu plano ${plano} permite no máximo ${limiteUsuarios} usuários. Faça upgrade para adicionar mais.`)
       return
     }
     if (precisaLoja && !form.store_id) {
@@ -125,14 +131,39 @@ export default function UsuariosClient({ usuarios: inicial, empresas, lojas, pro
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="text-2xl font-bold text-white">Usuários</h1>
-          <p className="text-slate-500 text-sm mt-1">{usuarios.length} usuário{usuarios.length !== 1 ? 's' : ''} cadastrado{usuarios.length !== 1 ? 's' : ''}</p>
+          <p className="text-slate-500 text-sm mt-1">
+            {usuarios.length} usuário{usuarios.length !== 1 ? 's' : ''} cadastrado{usuarios.length !== 1 ? 's' : ''}
+            {limiteUsuarios !== null && (
+              <span className="ml-2 text-xs text-slate-600">
+                ({usuarios.length}/{limiteUsuarios} no plano {plano})
+              </span>
+            )}
+          </p>
         </div>
-        <button onClick={openCreate}
-          className="flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white text-sm font-medium px-4 py-2.5 rounded-xl transition-colors">
+        <button onClick={openCreate} disabled={atingiuLimite}
+          className="flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white text-sm font-medium px-4 py-2.5 rounded-xl transition-colors disabled:opacity-40 disabled:cursor-not-allowed">
           <Plus size={16} />
           Novo usuário
         </button>
       </div>
+
+      {/* Banner de limite atingido */}
+      {atingiuLimite && (
+        <div className="flex items-center justify-between bg-amber-500/10 border border-amber-500/20 rounded-xl px-4 py-3 mb-6">
+          <div className="flex items-center gap-3">
+            <TrendingUp size={18} className="text-amber-400 flex-shrink-0" />
+            <div>
+              <p className="text-sm font-medium text-amber-300">Limite do plano {plano} atingido</p>
+              <p className="text-xs text-amber-400/70 mt-0.5">Você usou {usuarios.length} de {limiteUsuarios} usuário{limiteUsuarios > 1 ? 's' : ''} disponíveis.</p>
+            </div>
+          </div>
+          <a href="/planos"
+            className="flex items-center gap-1.5 bg-amber-500 hover:bg-amber-400 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition flex-shrink-0">
+            <TrendingUp size={13} />
+            Fazer upgrade
+          </a>
+        </div>
+      )}
 
       {/* Modal criar/editar */}
       {showForm && (
