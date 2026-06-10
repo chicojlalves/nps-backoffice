@@ -46,11 +46,21 @@ export async function POST(request) {
 
     const appUrl = process.env.NEXT_PUBLIC_APP_URL
 
+    // Verifica se empresa já tem lojas — define destino pós pagamento
+    const { count } = await supabase
+      .from('stores')
+      .select('id', { count: 'exact', head: true })
+      .eq('company_id', profile.company_id)
+
+    const successUrl = count === 0
+      ? `${appUrl}/onboarding/loja`
+      : `${appUrl}/dashboard?upgrade=1`
+
     const sessionParams = {
       customer: customerId,
       mode: 'subscription',
       line_items: [{ price: plan.priceId, quantity: 1 }],
-      success_url: `${appUrl}/onboarding/loja`,
+      success_url: successUrl,
       cancel_url: `${appUrl}/planos`,
       metadata: { company_id: profile.company_id, plan: planKey },
     }

@@ -50,6 +50,13 @@ export default function DashboardClient({ profile, lojas, verRelatorioAtendente,
   const [to, setTo] = useState(today)
   const [preset, setPreset] = useState('7 dias')
   const [storeId, setStoreId] = useState('0')
+  const hasUpgrade = typeof window !== 'undefined'
+    && new URLSearchParams(window.location.search).get('upgrade') === '1'
+  const [showUpgradeBanner, setShowUpgradeBanner] = useState(hasUpgrade)
+
+  useEffect(() => {
+    if (hasUpgrade) window.history.replaceState({}, '', '/dashboard')
+  }, [hasUpgrade])
 
   function applyPreset(p) {
     setPreset(p.label)
@@ -92,6 +99,20 @@ export default function DashboardClient({ profile, lojas, verRelatorioAtendente,
 
   return (
     <div>
+      {/* Banner de upgrade concluído */}
+      {showUpgradeBanner && (
+        <div className="flex items-center justify-between bg-green-500/10 border border-green-500/20 rounded-xl px-4 py-3 mb-6">
+          <div className="flex items-center gap-3">
+            <span className="text-green-400 text-lg">🎉</span>
+            <div>
+              <p className="text-sm font-medium text-green-300">Upgrade realizado com sucesso!</p>
+              <p className="text-xs text-green-400/70 mt-0.5">Seu plano foi atualizado. Os novos recursos já estão disponíveis.</p>
+            </div>
+          </div>
+          <button onClick={() => setShowUpgradeBanner(false)} className="text-green-400/50 hover:text-green-300 text-lg ml-4">✕</button>
+        </div>
+      )}
+
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div>
