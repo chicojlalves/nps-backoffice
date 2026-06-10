@@ -22,9 +22,17 @@ export async function POST(request) {
       const companyId = session.metadata?.company_id
       const planKey = session.metadata?.plan
 
-      if (companyId) {
+      if (companyId && session.subscription) {
+        const subscription = await stripe.subscriptions.retrieve(session.subscription)
+        const statusMap = {
+          active: 'active',
+          trialing: 'trialing',
+          past_due: 'past_due',
+          canceled: 'canceled',
+          unpaid: 'past_due',
+        }
         await supabase.from('companies').update({
-          subscription_status: 'active',
+          subscription_status: statusMap[subscription.status] ?? subscription.status,
           plan: planKey,
           stripe_subscription_id: session.subscription,
         }).eq('id', companyId)
@@ -60,6 +68,12 @@ export async function POST(request) {
         subscription_status: 'canceled',
         plan: 'free',
       }).eq('stripe_subscription_id', subscription.id)
+      break
+    }
+
+    case 'customer.subscription.trial_will_end': {
+      // Stripe dispara 3 dias antes do trial expirar — sem ação necessária,
+      // o layout já calcula os dias restantes via created_at
       break
     }
 
