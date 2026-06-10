@@ -3,12 +3,19 @@
 import { useState } from 'react'
 import { Users, Plus, X, Pencil, Trash2, TrendingUp } from 'lucide-react'
 
-const ROLES = [
+const TODOS_ROLES = [
   { value: 'proprietario', label: 'Proprietário(a)', needsStore: false },
-  { value: 'supervisor', label: 'Supervisor(a)', needsStore: true },
-  { value: 'gerente', label: 'Gerente', needsStore: true },
-  { value: 'atendente', label: 'Atendente', needsStore: true },
+  { value: 'supervisor',   label: 'Supervisor(a)',   needsStore: true },
+  { value: 'gerente',      label: 'Gerente',         needsStore: true },
+  { value: 'atendente',   label: 'Atendente',        needsStore: true },
 ]
+
+const ROLES_PERMITIDOS = {
+  admin:        ['proprietario', 'supervisor', 'gerente', 'atendente'],
+  proprietario: ['supervisor', 'gerente', 'atendente'],
+  supervisor:   ['gerente', 'atendente'],
+  gerente:      ['atendente'],
+}
 
 const roleColors = {
   admin:        'bg-blue-500/10 text-blue-400 border-blue-500/20',
@@ -29,8 +36,11 @@ export default function UsuariosClient({ usuarios: inicial, empresas, lojas, pro
   const [erro, setErro] = useState('')
   const [form, setForm] = useState({ ...EMPTY_FORM, company_id: profile.company_id ?? '', store_id: profile.store_id ?? '' })
 
+  const rolesPermitidos = TODOS_ROLES.filter(r =>
+    (ROLES_PERMITIDOS[profile.role] ?? []).includes(r.value)
+  )
   const lojasFiltradas = lojas.filter(l => l.company_id === form.company_id)
-  const roleAtual = ROLES.find(r => r.value === form.role)
+  const roleAtual = TODOS_ROLES.find(r => r.value === form.role)
   const precisaLoja = roleAtual?.needsStore ?? true
 
   function handleChange(e) {
@@ -203,7 +213,7 @@ export default function UsuariosClient({ usuarios: inicial, empresas, lojas, pro
                 <select name="role" value={form.role} onChange={handleChange}
                   className="bg-[#0f1117] border border-white/10 rounded-xl px-4 py-2.5 text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
                   <option value="">Selecione…</option>
-                  {ROLES.map(r => <option key={r.value} value={r.value}>{r.label}</option>)}
+                  {rolesPermitidos.map(r => <option key={r.value} value={r.value}>{r.label}</option>)}
                 </select>
               </div>
 

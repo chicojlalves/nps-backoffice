@@ -30,6 +30,16 @@ export async function POST(request) {
       return Response.json({ error: 'Campos obrigatórios ausentes.' }, { status: 400 })
     }
 
+    const ROLES_PERMITIDOS = {
+      admin:        ['proprietario', 'supervisor', 'gerente', 'atendente'],
+      proprietario: ['supervisor', 'gerente', 'atendente'],
+      supervisor:   ['gerente', 'atendente'],
+      gerente:      ['atendente'],
+    }
+    if (!(ROLES_PERMITIDOS[profile.role] ?? []).includes(role)) {
+      return Response.json({ error: 'Sem permissão para criar usuário com este perfil.' }, { status: 403 })
+    }
+
     const admin = createAdmin(
       process.env.NEXT_PUBLIC_SUPABASE_URL,
       process.env.SUPABASE_SERVICE_ROLE_KEY
