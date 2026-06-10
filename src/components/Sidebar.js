@@ -57,14 +57,14 @@ export default function Sidebar({ profile }) {
     <>
       {/* ===== DESKTOP sidebar ===== */}
       <aside
-        className={`hidden md:flex flex-col bg-[#0a0d14] border-r border-white/5 transition-all duration-300 ease-in-out ${expanded ? 'w-56' : 'w-16'}`}
+        className={`hidden md:flex flex-col bg-[#0a0d14] border-r border-white/5 transition-all duration-300 ease-in-out ${expanded ? 'w-60' : 'w-16'}`}
         onMouseEnter={() => setExpanded(true)}
         onMouseLeave={() => setExpanded(false)}
       >
         {/* Logo */}
-        <div className="flex items-center gap-3 px-4 h-16 border-b border-white/5 overflow-hidden">
-          <div className="flex-shrink-0 w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-            <BarChart3 size={16} className="text-white" />
+        <div className="flex items-center gap-3 px-4 h-20 border-b border-white/5 overflow-hidden">
+          <div className="flex-shrink-0 w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+            <BarChart3 size={20} className="text-white" />
           </div>
           <span className={`font-bold text-white whitespace-nowrap transition-opacity duration-200 ${expanded ? 'opacity-100' : 'opacity-0'}`}>
             VozCX
@@ -112,10 +112,10 @@ export default function Sidebar({ profile }) {
       </aside>
 
       {/* ===== MOBILE topbar ===== */}
-      <div className="md:hidden fixed top-0 left-0 right-0 z-40 bg-[#0a0d14] border-b border-white/5 h-14 flex items-center justify-between px-4">
+      <div className="md:hidden fixed top-0 left-0 right-0 z-40 bg-[#0a0d14] border-b border-white/5 h-16 flex items-center justify-between px-4">
         <div className="flex items-center gap-2">
-          <div className="w-7 h-7 bg-blue-600 rounded-lg flex items-center justify-center">
-            <BarChart3 size={14} className="text-white" />
+          <div className="w-9 h-9 bg-blue-600 rounded-lg flex items-center justify-center">
+            <BarChart3 size={18} className="text-white" />
           </div>
           <span className="font-bold text-white text-sm">VozCX</span>
         </div>
@@ -133,10 +133,10 @@ export default function Sidebar({ profile }) {
           {/* Drawer */}
           <div className="relative w-64 bg-[#0a0d14] flex flex-col h-full ml-auto">
             {/* Header drawer */}
-            <div className="flex items-center justify-between px-4 h-14 border-b border-white/5">
+            <div className="flex items-center justify-between px-4 h-16 border-b border-white/5">
               <div className="flex items-center gap-2">
-                <div className="w-7 h-7 bg-blue-600 rounded-lg flex items-center justify-center">
-                  <BarChart3 size={14} className="text-white" />
+                <div className="w-9 h-9 bg-blue-600 rounded-lg flex items-center justify-center">
+                  <BarChart3 size={18} className="text-white" />
                 </div>
                 <span className="font-bold text-white text-sm">VozCX</span>
               </div>
