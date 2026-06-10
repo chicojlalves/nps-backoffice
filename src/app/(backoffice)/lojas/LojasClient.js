@@ -6,7 +6,7 @@ import { Store, Plus, X, QrCode, ExternalLink, Pencil, Trash2 } from 'lucide-rea
 
 const EMPTY = { nome: '', company_id: '' }
 
-export default function LojasClient({ lojas: inicial, empresas, profile }) {
+export default function LojasClient({ lojas: inicial, empresas, profile, limiteLojas, plano }) {
   const [lojas, setLojas] = useState(inicial)
   const [showForm, setShowForm] = useState(false)
   const [editing, setEditing] = useState(null)
@@ -33,12 +33,19 @@ export default function LojasClient({ lojas: inicial, empresas, profile }) {
     setShowForm(true)
   }
 
+  const atingiuLimite = limiteLojas !== null && lojas.length >= limiteLojas
+
   async function handleSubmit(e) {
     e.preventDefault()
     setErro('')
 
     if (!form.nome || !form.company_id) {
       setErro('Nome e empresa são obrigatórios.')
+      return
+    }
+
+    if (!editing && atingiuLimite) {
+      setErro(`Seu plano ${plano} permite no máximo ${limiteLojas} loja${limiteLojas > 1 ? 's' : ''}. Faça upgrade para adicionar mais.`)
       return
     }
 
@@ -90,13 +97,28 @@ export default function LojasClient({ lojas: inicial, empresas, profile }) {
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="text-2xl font-bold text-white">Lojas</h1>
-          <p className="text-slate-500 text-sm mt-1">{lojas.length} loja{lojas.length !== 1 ? 's' : ''} cadastrada{lojas.length !== 1 ? 's' : ''}</p>
+          <p className="text-slate-500 text-sm mt-1">
+            {lojas.length} loja{lojas.length !== 1 ? 's' : ''} cadastrada{lojas.length !== 1 ? 's' : ''}
+            {limiteLojas !== null && (
+              <span className="ml-2 text-xs text-slate-600">
+                ({lojas.length}/{limiteLojas} do plano {plano})
+              </span>
+            )}
+          </p>
         </div>
-        <button onClick={openCreate}
-          className="flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white text-sm font-medium px-4 py-2.5 rounded-xl transition-colors">
-          <Plus size={16} />
-          Nova loja
-        </button>
+        <div className="flex flex-col items-end gap-1">
+          <button onClick={openCreate} disabled={atingiuLimite}
+            className="flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white text-sm font-medium px-4 py-2.5 rounded-xl transition-colors disabled:opacity-40 disabled:cursor-not-allowed">
+            <Plus size={16} />
+            Nova loja
+          </button>
+          {atingiuLimite && (
+            <p className="text-xs text-amber-400">
+              Limite atingido —{' '}
+              <a href="/planos" className="underline hover:text-amber-300">faça upgrade</a>
+            </p>
+          )}
+        </div>
       </div>
 
       {/* Modal criar/editar */}
