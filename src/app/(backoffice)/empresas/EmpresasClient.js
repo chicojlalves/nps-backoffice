@@ -189,7 +189,7 @@ export default function EmpresasClient({ empresas: inicial }) {
             <Building2 size={22} className="text-slate-500" />
           </div>
           <p className="text-slate-400 font-medium">Nenhuma empresa cadastrada</p>
-          <p className="text-slate-600 text-sm">Clique em "Nova empresa" para começar</p>
+          <p className="text-slate-600 text-sm">Clique em &quot;Nova empresa&quot; para começar</p>
         </div>
       ) : (
         <div className="bg-[#151820] border border-white/5 rounded-2xl overflow-hidden">

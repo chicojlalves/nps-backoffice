@@ -57,6 +57,7 @@ export default function DashboardClient({ profile, lojas }) {
     setLoading(false)
   }, [from, to, storeId])
 
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => { load() }, [load])
 
   const s = data?.summary ?? {}

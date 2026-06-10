@@ -10,6 +10,25 @@ import {
   LogOut, BarChart3, Menu, X, UserCircle, ShieldCheck,
 } from 'lucide-react'
 
+function NavLinks({ links, pathname, onClick }) {
+  return (
+    <>
+      {links.map(({ href, label, icon: Icon }) => {
+        const active = pathname === href
+        return (
+          <Link key={href} href={href} onClick={onClick}
+            className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors ${
+              active ? 'bg-blue-600/20 text-blue-400' : 'text-slate-500 hover:bg-white/5 hover:text-slate-200'
+            }`}>
+            <Icon size={20} className="flex-shrink-0" />
+            <span className="text-sm font-medium">{label}</span>
+          </Link>
+        )
+      })}
+    </>
+  )
+}
+
 export default function Sidebar({ profile }) {
   const pathname = usePathname()
   const router = useRouter()
@@ -33,23 +52,6 @@ export default function Sidebar({ profile }) {
 
   const initials = profile.nome
     .split(' ').slice(0, 2).map(n => n[0]).join('').toUpperCase()
-
-  const NavLinks = ({ onClick }) => (
-    <>
-      {links.map(({ href, label, icon: Icon }) => {
-        const active = pathname === href
-        return (
-          <Link key={href} href={href} onClick={onClick}
-            className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors ${
-              active ? 'bg-blue-600/20 text-blue-400' : 'text-slate-500 hover:bg-white/5 hover:text-slate-200'
-            }`}>
-            <Icon size={20} className="flex-shrink-0" />
-            <span className="text-sm font-medium">{label}</span>
-          </Link>
-        )
-      })}
-    </>
-  )
 
   return (
     <>
@@ -145,7 +147,7 @@ export default function Sidebar({ profile }) {
 
             {/* Nav */}
             <nav className="flex-1 p-3 flex flex-col gap-1">
-              <NavLinks onClick={() => setMobileOpen(false)} />
+              <NavLinks links={links} pathname={pathname} onClick={() => setMobileOpen(false)} />
             </nav>
 
             {/* User + Logout */}

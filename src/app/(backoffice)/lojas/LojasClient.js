@@ -179,7 +179,7 @@ export default function LojasClient({ lojas: inicial, empresas, profile }) {
             <Store size={22} className="text-slate-500" />
           </div>
           <p className="text-slate-400 font-medium">Nenhuma loja cadastrada</p>
-          <p className="text-slate-600 text-sm">Clique em "Nova loja" para começar</p>
+          <p className="text-slate-600 text-sm">Clique em &quot;Nova loja&quot; para começar</p>
         </div>
       ) : (
         <div className="bg-[#151820] border border-white/5 rounded-2xl overflow-hidden">

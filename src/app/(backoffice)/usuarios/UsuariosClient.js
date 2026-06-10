@@ -249,7 +249,7 @@ export default function UsuariosClient({ usuarios: inicial, empresas, lojas, pro
             <Users size={22} className="text-slate-500" />
           </div>
           <p className="text-slate-400 font-medium">Nenhum usuário cadastrado</p>
-          <p className="text-slate-600 text-sm">Clique em "Novo usuário" para começar</p>
+          <p className="text-slate-600 text-sm">Clique em &quot;Novo usuário&quot; para começar</p>
         </div>
       ) : (
         <div className="bg-[#151820] border border-white/5 rounded-2xl overflow-hidden">
