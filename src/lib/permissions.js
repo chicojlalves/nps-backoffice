@@ -14,6 +14,18 @@ export function canViewRelatorioAtendente(role, plan) {
   return false
 }
 
+export function canViewRelatorioLoja(role, plan) {
+  if (role === 'admin') return true
+  if (plan === 'business') return true
+  return false
+}
+
+export function canViewComentarios(role, plan) {
+  if (role === 'admin') return true
+  if (['pro', 'business'].includes(plan)) return true
+  return false
+}
+
 export function canManageStores(role) {
   return ['admin', 'proprietario'].includes(role)
 }

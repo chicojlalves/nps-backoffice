@@ -55,6 +55,30 @@ export async function GET(request) {
       nps: Math.round(((v.promoters - v.detractors) / v.total) * 100),
     }))
 
+    // NPS por loja
+    const byStore = {}
+    responses.forEach(r => {
+      if (!r.store_id) return
+      if (!byStore[r.store_id]) byStore[r.store_id] = { promoters: 0, detractors: 0, total: 0, nome: r.store_id }
+      byStore[r.store_id].total++
+      if (r.score >= 9) byStore[r.store_id].promoters++
+      if (r.score <= 6) byStore[r.store_id].detractors++
+    })
+
+    // Busca nomes das lojas
+    const storeIds = Object.keys(byStore)
+    let storeNames = {}
+    if (storeIds.length > 0) {
+      const { data: stores } = await supabase.from('stores').select('id, nome').in('id', storeIds)
+      stores?.forEach(s => { storeNames[s.id] = s.nome })
+    }
+
+    const byStoreArr = Object.entries(byStore).map(([id, v]) => ({
+      store: storeNames[id] ?? id,
+      nps: Math.round(((v.promoters - v.detractors) / v.total) * 100),
+      total: v.total,
+    })).sort((a, b) => b.nps - a.nps)
+
     // Últimos 50 comentários
     const comments = responses
       .filter(r => r.comment)
@@ -70,6 +94,7 @@ export async function GET(request) {
     return Response.json({
       summary: { nps, total, promoters, detractors, passives },
       byAttendant: byAttendantArr,
+      byStore: byStoreArr,
       timeseries,
       comments,
     })

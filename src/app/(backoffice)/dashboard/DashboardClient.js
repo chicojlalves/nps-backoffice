@@ -4,6 +4,21 @@ import { useState, useEffect, useCallback } from 'react'
 import { TrendingUp, Users, ThumbsUp, ThumbsDown, RefreshCw } from 'lucide-react'
 import { LineChart, BarChart, DonutChart } from '@/components/Charts'
 
+function BloqueioUpgrade({ titulo, descricao }) {
+  return (
+    <div className="bg-[#151820] border border-white/5 rounded-2xl p-6 mb-6 flex items-center justify-between">
+      <div>
+        <p className="text-sm font-semibold text-slate-300 mb-1">{titulo}</p>
+        <p className="text-xs text-slate-500">{descricao}</p>
+      </div>
+      <a href="/planos"
+        className="flex items-center gap-1.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition flex-shrink-0 ml-4">
+        Fazer upgrade
+      </a>
+    </div>
+  )
+}
+
 const scoreClass = {
   promotor: 'text-emerald-400',
   neutro: 'text-amber-400',
@@ -28,7 +43,7 @@ function dateAgo(days) {
   return new Date(Date.now() - days * 24 * 60 * 60 * 1000).toISOString().slice(0, 10)
 }
 
-export default function DashboardClient({ profile, lojas, verRelatorioAtendente, plan }) {
+export default function DashboardClient({ profile, lojas, verRelatorioAtendente, verRelatorioLoja, verComentarios, plan }) {
   const today = new Date().toISOString().slice(0, 10)
 
   const [from, setFrom] = useState(dateAgo(6))
@@ -213,7 +228,7 @@ export default function DashboardClient({ profile, lojas, verRelatorioAtendente,
         </div>
       </div>
 
-      {/* Gráfico por atendente */}
+      {/* NPS por atendente — Pro e Business */}
       {!loading && verRelatorioAtendente && data?.byAttendant?.length > 0 && (
         <div className="bg-[#151820] border border-white/5 rounded-2xl p-6 mb-6">
           <h3 className="text-sm font-semibold text-slate-300 mb-4">NPS por atendente</h3>
@@ -224,23 +239,9 @@ export default function DashboardClient({ profile, lojas, verRelatorioAtendente,
         </div>
       )}
 
-      {/* Bloqueio relatório por atendente — plano free */}
-      {!loading && !verRelatorioAtendente && (
-        <div className="bg-[#151820] border border-white/5 rounded-2xl p-6 mb-6 flex items-center justify-between">
-          <div>
-            <p className="text-sm font-semibold text-slate-300 mb-1">NPS por atendente</p>
-            <p className="text-xs text-slate-500">Disponível nos planos Pro e Business.</p>
-          </div>
-          <a href="/planos"
-            className="flex items-center gap-1.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition flex-shrink-0">
-            Fazer upgrade
-          </a>
-        </div>
-      )}
-
-      {/* Tabela de comentários */}
-      {!loading && data?.comments?.length > 0 && (
-        <div className="bg-[#151820] border border-white/5 rounded-2xl overflow-hidden">
+      {/* Comentários — Pro e Business */}
+      {!loading && verComentarios && data?.comments?.length > 0 && (
+        <div className="bg-[#151820] border border-white/5 rounded-2xl overflow-hidden mb-6">
           <div className="px-6 py-4 border-b border-white/5">
             <h3 className="text-sm font-semibold text-slate-300">Últimos comentários</h3>
           </div>
@@ -270,6 +271,25 @@ export default function DashboardClient({ profile, lojas, verRelatorioAtendente,
             </tbody>
           </table>
         </div>
+      )}
+
+      {/* NPS por loja — Business */}
+      {!loading && verRelatorioLoja && data?.byStore?.length > 0 && (
+        <div className="bg-[#151820] border border-white/5 rounded-2xl p-6 mb-6">
+          <h3 className="text-sm font-semibold text-slate-300 mb-4">NPS por loja</h3>
+          <BarChart
+            series={[{ name: 'NPS', data: data.byStore.map(s => s.nps) }]}
+            categories={data.byStore.map(s => s.store)}
+          />
+        </div>
+      )}
+
+      {/* Bloqueios de upgrade */}
+      {!loading && !verRelatorioAtendente && (
+        <BloqueioUpgrade titulo="NPS por atendente e comentários" descricao="Disponível nos planos Pro e Business." />
+      )}
+      {!loading && verRelatorioAtendente && !verRelatorioLoja && (
+        <BloqueioUpgrade titulo="NPS por loja" descricao="Disponível no plano Business." />
       )}
     </div>
   )

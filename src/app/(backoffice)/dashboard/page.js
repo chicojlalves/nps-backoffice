@@ -1,6 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { getProfile } from '@/lib/auth'
-import { canViewRelatorioAtendente } from '@/lib/permissions'
+import { canViewRelatorioAtendente, canViewRelatorioLoja, canViewComentarios } from '@/lib/permissions'
 import DashboardClient from './DashboardClient'
 
 export default async function DashboardPage() {
@@ -13,13 +13,14 @@ export default async function DashboardPage() {
   ])
 
   const plan = company?.plan ?? 'free'
-  const verRelatorioAtendente = canViewRelatorioAtendente(profile.role, plan)
 
   return (
     <DashboardClient
       profile={profile}
       lojas={lojas ?? []}
-      verRelatorioAtendente={verRelatorioAtendente}
+      verRelatorioAtendente={canViewRelatorioAtendente(profile.role, plan)}
+      verRelatorioLoja={canViewRelatorioLoja(profile.role, plan)}
+      verComentarios={canViewComentarios(profile.role, plan)}
       plan={plan}
     />
   )
