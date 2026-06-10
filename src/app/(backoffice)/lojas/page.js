@@ -19,7 +19,7 @@ export default async function LojasPage() {
   ])
 
   const plano = company?.plan ?? 'free'
-  const limiteLojas = plano in LIMITE_PLANO ? LIMITE_PLANO[plano] : 1
+  const limiteLojas = profile.role === 'admin' ? null : (plano in LIMITE_PLANO ? LIMITE_PLANO[plano] : 1)
 
   return (
     <LojasClient

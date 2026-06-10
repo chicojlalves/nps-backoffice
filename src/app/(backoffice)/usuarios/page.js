@@ -20,7 +20,7 @@ export default async function UsuariosPage() {
   ])
 
   const plano = company?.plan ?? 'free'
-  const limiteUsuarios = plano in LIMITE_USUARIOS ? LIMITE_USUARIOS[plano] : 3
+  const limiteUsuarios = profile.role === 'admin' ? null : (plano in LIMITE_USUARIOS ? LIMITE_USUARIOS[plano] : 3)
 
   return (
     <UsuariosClient
