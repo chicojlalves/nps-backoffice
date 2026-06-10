@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
+import { createClient as createServiceClient } from '@/lib/supabase/service'
 import { getProfile } from '@/lib/auth'
 import { redirect } from 'next/navigation'
 import { canViewAuditoria } from '@/lib/permissions'
@@ -19,8 +20,10 @@ export default async function AuditoriaPage() {
 
   if (!canViewAuditoria(profile.role, plan)) redirect('/dashboard')
 
-  // Admin vê tudo, proprietario business vê só da sua empresa
-  let query = supabase
+  // Admin usa service role para bypassar RLS e ver todos os registros
+  const queryClient = profile.role === 'admin' ? createServiceClient() : supabase
+
+  let query = queryClient
     .from('audit_logs')
     .select('*')
     .order('created_at', { ascending: false })
