@@ -181,7 +181,7 @@ export default function LandingPage() {
               Já tenho uma conta
             </Link>
           </div>
-          <p className="text-slate-600 text-xs mt-4">Sem cartão de crédito. Cancele quando quiser.</p>
+          <p className="text-slate-600 text-xs mt-4">Não cobraremos nada até o fim dos 30 dias de teste. Cancele quando quiser.</p>
         </div>
 
         {/* Mockup */}
@@ -342,6 +342,52 @@ export default function LandingPage() {
               </div>
             ))}
           </div>
+
+          {/* Tabela comparativa */}
+          <div className="mt-12 bg-[#1a1d27] rounded-2xl border border-white/10 overflow-hidden">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-white/10">
+                  <th className="text-left text-xs font-medium text-slate-400 px-6 py-4">Recurso</th>
+                  <th className="text-center text-xs font-medium text-slate-400 px-4 py-4">Free</th>
+                  <th className="text-center text-xs font-medium text-indigo-400 px-4 py-4">Pro</th>
+                  <th className="text-center text-xs font-medium text-amber-400 px-4 py-4">Business</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { recurso: 'Lojas',                   free: '1',   pro: '5',   business: 'Ilimitadas' },
+                  { recurso: 'Usuários',                free: '3',   pro: '15',  business: 'Ilimitados' },
+                  { recurso: 'QR Code por loja',        free: true,  pro: true,  business: true },
+                  { recurso: 'KPIs gerais de NPS',      free: true,  pro: true,  business: true },
+                  { recurso: 'Gráfico de evolução',     free: true,  pro: true,  business: true },
+                  { recurso: 'NPS por atendente',       free: false, pro: true,  business: true },
+                  { recurso: 'Comentários dos clientes',free: false, pro: true,  business: true },
+                  { recurso: 'NPS por loja',            free: false, pro: false, business: true },
+                  { recurso: 'Auditoria de ações',      free: false, pro: false, business: true },
+                  { recurso: 'Suporte prioritário',     free: false, pro: false, business: true },
+                ].map((row, i, arr) => (
+                  <tr key={row.recurso} className={`${i !== arr.length - 1 ? 'border-b border-white/5' : ''}`}>
+                    <td className="px-6 py-3.5 text-slate-300 text-sm">{row.recurso}</td>
+                    {['free', 'pro', 'business'].map(p => (
+                      <td key={p} className="px-4 py-3.5 text-center">
+                        {typeof row[p] === 'boolean' ? (
+                          row[p]
+                            ? <span className="text-indigo-400 font-bold">✓</span>
+                            : <span className="text-slate-700">—</span>
+                        ) : (
+                          <span className={`text-xs font-medium ${
+                            p === 'business' ? 'text-amber-400' :
+                            p === 'pro'      ? 'text-indigo-400' : 'text-slate-400'
+                          }`}>{row[p]}</span>
+                        )}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </section>
 
@@ -352,7 +398,7 @@ export default function LandingPage() {
             Pronto para ouvir seus clientes?
           </h2>
           <p className="text-slate-400 mb-8">
-            Comece grátis hoje. Sem cartão de crédito, sem burocracia.
+            Comece grátis hoje. Não cobraremos nada até o fim dos 30 dias de teste.
           </p>
           <Link
             href="/onboarding"
