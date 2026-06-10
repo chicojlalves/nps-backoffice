@@ -2,7 +2,20 @@
 
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
-import { Building2, Plus, X, Pencil, Trash2 } from 'lucide-react'
+import { Building2, Plus, X, Pencil, Trash2, Crown } from 'lucide-react'
+
+const PLANO_CONFIG = {
+  free:     { label: 'Free',     classe: 'bg-slate-500/10 text-slate-400 border-slate-500/20' },
+  pro:      { label: 'Pro',      classe: 'bg-indigo-500/10 text-indigo-400 border-indigo-500/20' },
+  business: { label: 'Business', classe: 'bg-amber-500/10 text-amber-400 border-amber-500/20' },
+}
+
+const STATUS_CONFIG = {
+  active:   { label: 'Ativo',      classe: 'text-green-400' },
+  trialing: { label: 'Trial',      classe: 'text-blue-400' },
+  past_due: { label: 'Inadimpl.',  classe: 'text-red-400' },
+  canceled: { label: 'Cancelado',  classe: 'text-slate-500' },
+}
 
 const EMPTY = { nome: '', cnpj: '', email: '', responsavel: '', telefone: '' }
 
@@ -200,6 +213,7 @@ export default function EmpresasClient({ empresas: inicial }) {
                 <th className="text-left text-xs font-medium text-slate-500 px-6 py-4 hidden sm:table-cell">Responsável</th>
                 <th className="text-left text-xs font-medium text-slate-500 px-6 py-4 hidden md:table-cell">E-mail</th>
                 <th className="text-left text-xs font-medium text-slate-500 px-6 py-4 hidden lg:table-cell">Telefone</th>
+                <th className="text-left text-xs font-medium text-slate-500 px-6 py-4 hidden sm:table-cell">Plano</th>
                 <th className="text-right text-xs font-medium text-slate-500 px-6 py-4">Ações</th>
               </tr>
             </thead>
@@ -220,6 +234,23 @@ export default function EmpresasClient({ empresas: inicial }) {
                   <td className="px-6 py-4 hidden sm:table-cell text-sm text-slate-300">{e.responsavel}</td>
                   <td className="px-6 py-4 hidden md:table-cell text-sm text-slate-400">{e.email}</td>
                   <td className="px-6 py-4 hidden lg:table-cell text-sm text-slate-400">{e.telefone || '–'}</td>
+                  <td className="px-6 py-4 hidden sm:table-cell">
+                    {(() => {
+                      const plano = PLANO_CONFIG[e.plan] ?? PLANO_CONFIG.free
+                      const status = STATUS_CONFIG[e.subscription_status]
+                      return (
+                        <div className="flex flex-col gap-1">
+                          <span className={`inline-flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-full border w-fit ${plano.classe}`}>
+                            <Crown size={10} />
+                            {plano.label}
+                          </span>
+                          {status && (
+                            <span className={`text-xs ${status.classe}`}>{status.label}</span>
+                          )}
+                        </div>
+                      )
+                    })()}
+                  </td>
                   <td className="px-6 py-4 text-right">
                     <div className="flex items-center justify-end gap-2">
                       <button onClick={() => openEdit(e)}
