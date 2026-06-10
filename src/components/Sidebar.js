@@ -47,7 +47,7 @@ export default function Sidebar({ profile }) {
     { href: '/empresas', label: 'Empresas', icon: Building2, show: canManageCompanies(profile.role) },
     { href: '/lojas', label: 'Lojas', icon: Store, show: canManageStores(profile.role) },
     { href: '/usuarios', label: 'Usuários', icon: Users, show: canManageUsers(profile.role) },
-    { href: '/auditoria', label: 'Auditoria', icon: ShieldCheck, show: canViewAuditoria(profile.role) },
+    { href: '/auditoria', label: 'Auditoria', icon: ShieldCheck, show: canViewAuditoria(profile.role, profile.companies?.plan) },
   ].filter(l => l.show)
 
   const initials = profile.nome

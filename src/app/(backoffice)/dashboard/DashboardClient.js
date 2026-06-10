@@ -28,7 +28,7 @@ function dateAgo(days) {
   return new Date(Date.now() - days * 24 * 60 * 60 * 1000).toISOString().slice(0, 10)
 }
 
-export default function DashboardClient({ profile, lojas }) {
+export default function DashboardClient({ profile, lojas, verRelatorioAtendente, plan }) {
   const today = new Date().toISOString().slice(0, 10)
 
   const [from, setFrom] = useState(dateAgo(6))
@@ -214,13 +214,27 @@ export default function DashboardClient({ profile, lojas }) {
       </div>
 
       {/* Gráfico por atendente */}
-      {!loading && data?.byAttendant?.length > 0 && (
+      {!loading && verRelatorioAtendente && data?.byAttendant?.length > 0 && (
         <div className="bg-[#151820] border border-white/5 rounded-2xl p-6 mb-6">
           <h3 className="text-sm font-semibold text-slate-300 mb-4">NPS por atendente</h3>
           <BarChart
             series={[{ name: 'NPS', data: data.byAttendant.map(a => a.nps) }]}
             categories={data.byAttendant.map(a => a.attendant)}
           />
+        </div>
+      )}
+
+      {/* Bloqueio relatório por atendente — plano free */}
+      {!loading && !verRelatorioAtendente && (
+        <div className="bg-[#151820] border border-white/5 rounded-2xl p-6 mb-6 flex items-center justify-between">
+          <div>
+            <p className="text-sm font-semibold text-slate-300 mb-1">NPS por atendente</p>
+            <p className="text-xs text-slate-500">Disponível nos planos Pro e Business.</p>
+          </div>
+          <a href="/planos"
+            className="flex items-center gap-1.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition flex-shrink-0">
+            Fazer upgrade
+          </a>
         </div>
       )}
 

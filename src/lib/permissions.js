@@ -2,8 +2,16 @@ export function canManageCompanies(role) {
   return role === 'admin'
 }
 
-export function canViewAuditoria(role) {
-  return role === 'admin'
+export function canViewAuditoria(role, plan) {
+  if (role === 'admin') return true
+  if (role === 'proprietario' && plan === 'business') return true
+  return false
+}
+
+export function canViewRelatorioAtendente(role, plan) {
+  if (role === 'admin') return true
+  if (['pro', 'business'].includes(plan)) return true
+  return false
 }
 
 export function canManageStores(role) {
