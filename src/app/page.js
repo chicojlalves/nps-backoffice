@@ -276,7 +276,7 @@ export default function LandingPage() {
             &ldquo;Finalmente consigo ver em tempo real o que os clientes acham de cada loja.
             O QR Code foi a solução mais simples que encontrei.&rdquo;
           </blockquote>
-          <p className="text-slate-500 text-sm">— Proprietário de rede com 4 lojas</p>
+          <p className="text-slate-500 text-sm">Proprietário de rede com 4 lojas</p>
         </div>
       </section>
 
