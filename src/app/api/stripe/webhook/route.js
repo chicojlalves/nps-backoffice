@@ -2,8 +2,6 @@ import { NextResponse } from 'next/server'
 import { stripe, getPlanByPriceId } from '@/lib/stripe'
 import { createClient } from '@/lib/supabase/service'
 
-export const config = { api: { bodyParser: false } }
-
 export async function POST(request) {
   const body = await request.text()
   const signature = request.headers.get('stripe-signature')
