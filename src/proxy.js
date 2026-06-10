@@ -5,7 +5,7 @@ export async function proxy(request) {
   const { pathname } = request.nextUrl
 
   // Rotas públicas — deixa passar sempre
-  const publicRoutes = ['/login', '/onboarding', '/pesquisa', '/qrcode', '/planos', '/api/stripe/webhook', '/api/onboarding']
+  const publicRoutes = ['/', '/login', '/onboarding', '/pesquisa', '/qrcode', '/planos', '/api/stripe/webhook', '/api/onboarding']
   if (publicRoutes.some(r => pathname.startsWith(r))) {
     return NextResponse.next({ request })
   }
