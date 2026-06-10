@@ -96,11 +96,20 @@ export default function DashboardClient({ profile, lojas, verRelatorioAtendente,
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div>
           <h1 className="text-2xl font-bold text-white">Dashboard</h1>
-          <p className="text-slate-500 text-sm mt-1">
+          <p className="text-slate-500 text-sm mt-1 flex items-center flex-wrap gap-2">
             Bem vindo(a), {profile.nome}
             {profile.companies?.nome && (
-              <span className="ml-2 text-xs bg-indigo-600/20 text-indigo-400 border border-indigo-600/30 px-2 py-0.5 rounded-full">
+              <span className="text-xs bg-indigo-600/20 text-indigo-400 border border-indigo-600/30 px-2 py-0.5 rounded-full">
                 {profile.companies.nome}
+              </span>
+            )}
+            {plan && (
+              <span className={`text-xs font-semibold px-2 py-0.5 rounded-full border ${
+                plan === 'business' ? 'bg-amber-500/10 text-amber-400 border-amber-500/20' :
+                plan === 'pro'      ? 'bg-violet-500/10 text-violet-400 border-violet-500/20' :
+                                     'bg-slate-500/10 text-slate-400 border-slate-500/20'
+              }`}>
+                {plan === 'business' ? '★ Business' : plan === 'pro' ? '◆ Pro' : 'Free'}
               </span>
             )}
           </p>
