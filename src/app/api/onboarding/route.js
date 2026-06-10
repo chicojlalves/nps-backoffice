@@ -15,14 +15,7 @@ export async function POST(request) {
 
     const supabase = createClient()
 
-    // 1. Verifica se e-mail já existe
-    const { data: existing } = await supabase
-      .from('profiles')
-      .select('id')
-      .eq('id', (await supabase.auth.admin.getUserByEmail(email)).data?.user?.id ?? '')
-      .maybeSingle()
-
-    // 2. Cria o auth user
+    // 1. Cria o auth user
     const { data: authData, error: authError } = await supabase.auth.admin.createUser({
       email,
       password: senha,
