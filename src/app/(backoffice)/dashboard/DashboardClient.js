@@ -81,7 +81,14 @@ export default function DashboardClient({ profile, lojas }) {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div>
           <h1 className="text-2xl font-bold text-white">Dashboard</h1>
-          <p className="text-slate-500 text-sm mt-1">Bem vindo(a), {profile.nome}</p>
+          <p className="text-slate-500 text-sm mt-1">
+            Bem vindo(a), {profile.nome}
+            {profile.companies?.nome && (
+              <span className="ml-2 text-xs bg-indigo-600/20 text-indigo-400 border border-indigo-600/30 px-2 py-0.5 rounded-full">
+                {profile.companies.nome}
+              </span>
+            )}
+          </p>
         </div>
         {lastUpdate && (
           <p className="text-xs text-slate-600">Atualizado: {lastUpdate}</p>
