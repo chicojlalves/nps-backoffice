@@ -38,23 +38,23 @@ export default function LoginPage() {
           <div className="w-9 h-9 bg-blue-600 rounded-xl flex items-center justify-center">
             <BarChart3 size={18} className="text-white" />
           </div>
-          <span className="text-white font-bold text-lg">NPS Backoffice</span>
+          <span className="text-white font-bold text-lg">VozCX</span>
         </div>
 
         <div>
           <div className="inline-flex items-center gap-2 bg-blue-500/10 border border-blue-500/20 rounded-full px-4 py-1.5 mb-6">
             <span className="w-1.5 h-1.5 rounded-full bg-blue-400"></span>
-            <span className="text-blue-400 text-xs font-medium">Sistema de gestão NPS</span>
+            <span className="text-blue-400 text-xs font-medium">A voz do cliente transformada em resultados</span>
           </div>
           <h2 className="text-4xl font-bold text-white leading-tight mb-4">
-            Monitore a satisfação dos seus clientes em tempo real.
+            A voz do cliente transformada em resultados.
           </h2>
           <p className="text-slate-500 text-sm leading-relaxed">
             Gerencie empresas, lojas e equipes com controle total de acesso e hierarquia.
           </p>
         </div>
 
-        <p className="text-slate-600 text-xs">© {new Date().getFullYear()} NPS Backoffice</p>
+        <p className="text-slate-600 text-xs">© {new Date().getFullYear()} VozCX</p>
       </div>
 
       {/* Formulário */}
@@ -64,7 +64,7 @@ export default function LoginPage() {
             <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
               <BarChart3 size={15} className="text-white" />
             </div>
-            <span className="font-bold text-white">NPS Backoffice</span>
+            <span className="font-bold text-white">VozCX</span>
           </div>
 
           <h1 className="text-2xl font-bold text-white mb-1">Entrar</h1>

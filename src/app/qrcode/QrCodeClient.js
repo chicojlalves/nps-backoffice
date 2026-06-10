@@ -38,7 +38,7 @@ export default function QrCodeClient({ loja, pesquisaUrl }) {
           <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
             <BarChart3 size={15} className="text-white" />
           </div>
-          <span className="font-bold text-white">NPS</span>
+          <span className="font-bold text-white">VozCX</span>
         </div>
 
         <div className="bg-[#151820] border border-white/5 rounded-2xl p-8 flex flex-col items-center gap-6">

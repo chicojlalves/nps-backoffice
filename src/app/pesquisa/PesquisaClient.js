@@ -87,7 +87,7 @@ export default function PesquisaClient({ store_id, company_id, atendentes }) {
         <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
           <BarChart3 size={15} className="text-white" />
         </div>
-        <span className="font-bold text-white text-lg">NPS</span>
+        <span className="font-bold text-white text-lg">VozCX</span>
       </div>
 
       {/* Conteúdo */}

@@ -67,7 +67,7 @@ export default function Sidebar({ profile }) {
             <BarChart3 size={16} className="text-white" />
           </div>
           <span className={`font-bold text-white whitespace-nowrap transition-opacity duration-200 ${expanded ? 'opacity-100' : 'opacity-0'}`}>
-            NPS
+            VozCX
           </span>
         </div>
 
@@ -117,7 +117,7 @@ export default function Sidebar({ profile }) {
           <div className="w-7 h-7 bg-blue-600 rounded-lg flex items-center justify-center">
             <BarChart3 size={14} className="text-white" />
           </div>
-          <span className="font-bold text-white text-sm">NPS</span>
+          <span className="font-bold text-white text-sm">VozCX</span>
         </div>
         <button onClick={() => setMobileOpen(true)} className="text-slate-400 hover:text-white p-1">
           <Menu size={22} />
@@ -138,7 +138,7 @@ export default function Sidebar({ profile }) {
                 <div className="w-7 h-7 bg-blue-600 rounded-lg flex items-center justify-center">
                   <BarChart3 size={14} className="text-white" />
                 </div>
-                <span className="font-bold text-white text-sm">NPS</span>
+                <span className="font-bold text-white text-sm">VozCX</span>
               </div>
               <button onClick={() => setMobileOpen(false)} className="text-slate-400 hover:text-white">
                 <X size={20} />

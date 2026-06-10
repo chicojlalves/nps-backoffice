@@ -5,8 +5,8 @@ import {
 } from 'lucide-react'
 
 export const metadata = {
-  title: 'NPS Backoffice — Monitore a satisfação dos seus clientes',
-  description: 'Plataforma de NPS para redes de lojas e franquias. Colete avaliações via QR Code e acompanhe o score em tempo real.',
+  title: 'VozCX: A voz do cliente transformada em resultados',
+  description: 'Plataforma de NPS para redes de lojas e franquias. Colete avaliações via QR Code e transforme o feedback dos clientes em decisões inteligentes.',
 }
 
 const features = [
@@ -132,7 +132,7 @@ export default function LandingPage() {
             <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
               <BarChart3 size={16} className="text-white" />
             </div>
-            <span className="font-bold text-white">NPS Backoffice</span>
+            <span className="font-bold text-white">VozCX</span>
           </div>
           <nav className="flex items-center gap-3">
             <Link
@@ -156,7 +156,7 @@ export default function LandingPage() {
         <div className="max-w-3xl mx-auto">
           <div className="inline-flex items-center gap-2 bg-indigo-600/10 border border-indigo-600/20 text-indigo-400 text-xs font-medium px-3 py-1.5 rounded-full mb-6">
             <Zap size={12} />
-            Simples para quem tem mais de uma loja
+            Feito para redes de lojas e franquias
           </div>
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6">
             Descubra o que seus{' '}
@@ -164,15 +164,14 @@ export default function LandingPage() {
             realmente pensam
           </h1>
           <p className="text-lg text-slate-400 mb-10 max-w-2xl mx-auto leading-relaxed">
-            Plataforma de NPS para redes de lojas e franquias. Colete avaliações via QR Code,
-            acompanhe o score por loja e tome decisões com base em dados reais.
+            A voz do cliente transformada em resultados.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link
               href="/onboarding"
               className="inline-flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold px-6 py-3 rounded-xl transition text-sm"
             >
-              Começar grátis — 30 dias <ArrowRight size={16} />
+              Começar grátis sem cartão <ArrowRight size={16} />
             </Link>
             <Link
               href="/login"
@@ -224,7 +223,7 @@ export default function LandingPage() {
       <section className="py-24 px-4 sm:px-6 bg-[#0a0d14]">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-14">
-            <h2 className="text-3xl font-bold text-white mb-3">Tudo que você precisa</h2>
+            <h2 className="text-3xl font-bold text-white mb-3">O que você ganha com a VozCX</h2>
             <p className="text-slate-400">Uma plataforma completa para gerenciar a satisfação dos clientes.</p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -395,10 +394,10 @@ export default function LandingPage() {
       <section className="py-24 px-4 sm:px-6 bg-[#0a0d14]">
         <div className="max-w-2xl mx-auto text-center">
           <h2 className="text-3xl font-bold text-white mb-4">
-            Pronto para ouvir seus clientes?
+            Transforme a voz do cliente em resultados reais.
           </h2>
           <p className="text-slate-400 mb-8">
-            Comece grátis hoje. Não cobraremos nada até o fim dos 30 dias de teste.
+            Crie sua conta grátis em menos de 2 minutos. Não cobraremos nada até o fim dos 30 dias.
           </p>
           <Link
             href="/onboarding"
@@ -416,7 +415,7 @@ export default function LandingPage() {
             <div className="w-6 h-6 bg-indigo-600 rounded-md flex items-center justify-center">
               <BarChart3 size={12} className="text-white" />
             </div>
-            <span className="text-sm font-semibold text-white">NPS Backoffice</span>
+            <span className="text-sm font-semibold text-white">VozCX</span>
           </div>
           <div className="flex items-center gap-6">
             <Link href="/onboarding" className="text-slate-500 hover:text-white text-sm transition">
@@ -429,7 +428,7 @@ export default function LandingPage() {
               Planos
             </Link>
           </div>
-          <p className="text-slate-600 text-xs">© 2026 NPS Backoffice. Todos os direitos reservados.</p>
+          <p className="text-slate-600 text-xs">© 2026 VozCX. Todos os direitos reservados.</p>
         </div>
       </footer>
 

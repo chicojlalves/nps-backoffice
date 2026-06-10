@@ -146,8 +146,8 @@ export default function PlanosPage() {
 
       <p className="text-gray-500 text-sm mt-10">
         Dúvidas? Entre em contato:{' '}
-        <a href="mailto:suporte@seudominio.com.br" className="text-indigo-400 hover:underline">
-          suporte@seudominio.com.br
+        <a href="mailto:suporte@vozcx.com.br" className="text-indigo-400 hover:underline">
+          suporte@vozcx.com.br
         </a>
       </p>
     </div>
