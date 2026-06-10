@@ -65,9 +65,20 @@ const planos = [
     key: 'free',
     nome: 'Free',
     preco: 'Grátis',
-    periodo: '30 dias',
+    periodo: '30 dias de teste',
     descricao: 'Para testar sem compromisso.',
-    recursos: ['1 loja', 'QR Code + pesquisa', 'Dashboard básico'],
+    recursos: [
+      '1 loja',
+      'Até 3 usuários',
+      'QR Code por loja',
+      'KPIs gerais de NPS',
+      'Gráfico de evolução',
+    ],
+    nao_inclui: [
+      'NPS por atendente',
+      'Comentários dos clientes',
+      'NPS por loja',
+    ],
     destaque: false,
     cta: 'Começar grátis',
   },
@@ -76,8 +87,17 @@ const planos = [
     nome: 'Pro',
     preco: 'R$ 97',
     periodo: '/mês',
-    descricao: 'Para pequenas redes.',
-    recursos: ['Até 5 lojas', 'Dashboard completo', 'Múltiplos usuários', 'Relatórios por atendente'],
+    descricao: 'Para pequenas redes que querem gestão do time.',
+    recursos: [
+      'Até 5 lojas',
+      'Até 15 usuários',
+      'Tudo do Free',
+      'NPS por atendente',
+      'Comentários dos clientes',
+    ],
+    nao_inclui: [
+      'NPS por loja',
+    ],
     destaque: true,
     cta: 'Assinar Pro',
   },
@@ -86,8 +106,16 @@ const planos = [
     nome: 'Business',
     preco: 'R$ 247',
     periodo: '/mês',
-    descricao: 'Para redes e franquias.',
-    recursos: ['Lojas ilimitadas', 'Tudo do Pro', 'Auditoria de ações', 'Suporte prioritário'],
+    descricao: 'Para redes e franquias com visão completa.',
+    recursos: [
+      'Lojas ilimitadas',
+      'Usuários ilimitados',
+      'Tudo do Pro',
+      'NPS por loja',
+      'Auditoria de ações',
+      'Suporte prioritário',
+    ],
+    nao_inclui: [],
     destaque: false,
     cta: 'Assinar Business',
   },
@@ -287,11 +315,17 @@ export default function LandingPage() {
                     </span>
                   </div>
                 </div>
-                <ul className="flex-1 space-y-3 mb-8">
+                <ul className="flex-1 space-y-2.5 mb-8">
                   {plano.recursos.map(r => (
                     <li key={r} className="flex items-center gap-2">
-                      <Check size={15} className={plano.destaque ? 'text-indigo-200' : 'text-indigo-400'} />
+                      <Check size={14} className={plano.destaque ? 'text-indigo-200' : 'text-indigo-400'} />
                       <span className={`text-sm ${plano.destaque ? 'text-indigo-100' : 'text-slate-300'}`}>{r}</span>
+                    </li>
+                  ))}
+                  {plano.nao_inclui?.map(r => (
+                    <li key={r} className="flex items-center gap-2 opacity-40">
+                      <span className={`text-sm font-bold ${plano.destaque ? 'text-indigo-200' : 'text-slate-500'}`}>✕</span>
+                      <span className={`text-sm line-through ${plano.destaque ? 'text-indigo-200' : 'text-slate-500'}`}>{r}</span>
                     </li>
                   ))}
                 </ul>
