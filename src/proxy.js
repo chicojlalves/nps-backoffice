@@ -55,7 +55,7 @@ export async function proxy(request) {
   const statusesPermitidos = ['active', 'trialing']
 
   // Sem assinatura válida → página de planos
-  if (!statusesPermitidos.includes(status) && pathname !== '/planos') {
+  if (!statusesPermitidos.includes(status) && pathname !== '/planos' && pathname !== '/onboarding/loja') {
     return NextResponse.redirect(new URL('/planos', request.url))
   }
 

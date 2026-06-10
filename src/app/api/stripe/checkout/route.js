@@ -50,7 +50,7 @@ export async function POST(request) {
       customer: customerId,
       mode: 'subscription',
       line_items: [{ price: plan.priceId, quantity: 1 }],
-      success_url: `${appUrl}/dashboard?sucesso=1`,
+      success_url: `${appUrl}/onboarding/loja`,
       cancel_url: `${appUrl}/planos`,
       metadata: { company_id: profile.company_id, plan: planKey },
     }
