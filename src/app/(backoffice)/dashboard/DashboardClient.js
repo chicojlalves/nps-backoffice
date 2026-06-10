@@ -248,6 +248,25 @@ export default function DashboardClient({ profile, lojas, verRelatorioAtendente,
         </div>
       )}
 
+      {/* NPS por loja — Business */}
+      {!loading && verRelatorioLoja && data?.byStore?.length > 0 && (
+        <div className="bg-[#151820] border border-white/5 rounded-2xl p-6 mb-6">
+          <h3 className="text-sm font-semibold text-slate-300 mb-4">NPS por loja</h3>
+          <BarChart
+            series={[{ name: 'NPS', data: data.byStore.map(s => s.nps) }]}
+            categories={data.byStore.map(s => s.store)}
+          />
+        </div>
+      )}
+
+      {/* Bloqueios de upgrade */}
+      {!loading && !verRelatorioAtendente && (
+        <BloqueioUpgrade titulo="NPS por atendente e comentários" descricao="Disponível nos planos Pro e Business." />
+      )}
+      {!loading && verRelatorioAtendente && !verRelatorioLoja && (
+        <BloqueioUpgrade titulo="NPS por loja" descricao="Disponível no plano Business." />
+      )}
+
       {/* Comentários — Pro e Business */}
       {!loading && verComentarios && data?.comments?.length > 0 && (
         <div className="bg-[#151820] border border-white/5 rounded-2xl overflow-hidden mb-6">
@@ -280,25 +299,6 @@ export default function DashboardClient({ profile, lojas, verRelatorioAtendente,
             </tbody>
           </table>
         </div>
-      )}
-
-      {/* NPS por loja — Business */}
-      {!loading && verRelatorioLoja && data?.byStore?.length > 0 && (
-        <div className="bg-[#151820] border border-white/5 rounded-2xl p-6 mb-6">
-          <h3 className="text-sm font-semibold text-slate-300 mb-4">NPS por loja</h3>
-          <BarChart
-            series={[{ name: 'NPS', data: data.byStore.map(s => s.nps) }]}
-            categories={data.byStore.map(s => s.store)}
-          />
-        </div>
-      )}
-
-      {/* Bloqueios de upgrade */}
-      {!loading && !verRelatorioAtendente && (
-        <BloqueioUpgrade titulo="NPS por atendente e comentários" descricao="Disponível nos planos Pro e Business." />
-      )}
-      {!loading && verRelatorioAtendente && !verRelatorioLoja && (
-        <BloqueioUpgrade titulo="NPS por loja" descricao="Disponível no plano Business." />
       )}
     </div>
   )
