@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
-import { canManageCompanies, canManageStores, canManageUsers } from '@/lib/permissions'
+import { canManageCompanies, canManageStores, canManageUsers, canViewAuditoria } from '@/lib/permissions'
 import {
   LayoutDashboard, Building2, Store, Users,
   LogOut, BarChart3, Menu, X, UserCircle, ShieldCheck,
@@ -47,7 +47,7 @@ export default function Sidebar({ profile }) {
     { href: '/empresas', label: 'Empresas', icon: Building2, show: canManageCompanies(profile.role) },
     { href: '/lojas', label: 'Lojas', icon: Store, show: canManageStores(profile.role) },
     { href: '/usuarios', label: 'Usuários', icon: Users, show: canManageUsers(profile.role) },
-    { href: '/auditoria', label: 'Auditoria', icon: ShieldCheck, show: ['admin', 'proprietario'].includes(profile.role) },
+    { href: '/auditoria', label: 'Auditoria', icon: ShieldCheck, show: canViewAuditoria(profile.role) },
   ].filter(l => l.show)
 
   const initials = profile.nome

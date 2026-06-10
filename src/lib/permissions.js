@@ -2,6 +2,10 @@ export function canManageCompanies(role) {
   return role === 'admin'
 }
 
+export function canViewAuditoria(role) {
+  return role === 'admin'
+}
+
 export function canManageStores(role) {
   return ['admin', 'proprietario'].includes(role)
 }
