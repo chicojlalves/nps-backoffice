@@ -16,12 +16,12 @@ export default async function PesquisaPage({ searchParams }) {
 
   const supabase = await createClient()
 
-  // Busca atendentes da loja
+  // Busca atendentes e gerentes da loja
   const { data: atendentes } = await supabase
     .from('profiles')
     .select('id, nome')
     .eq('store_id', store_id)
-    .eq('role', 'atendente')
+    .in('role', ['atendente', 'gerente'])
     .order('nome')
 
   return (
