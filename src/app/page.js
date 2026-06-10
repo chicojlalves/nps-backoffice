@@ -397,7 +397,7 @@ export default function LandingPage() {
             Transforme a voz do cliente em resultados reais.
           </h2>
           <p className="text-slate-400 mb-8">
-            Crie sua conta grátis em menos de 2 minutos. Não cobraremos nada até o fim dos 30 dias.
+            Crie sua conta grátis em menos de 2 minutos.
           </p>
           <Link
             href="/onboarding"
