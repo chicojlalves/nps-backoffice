@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
-import { Store, Plus, X, QrCode, ExternalLink, Pencil, Trash2 } from 'lucide-react'
+import { Store, Plus, X, QrCode, ExternalLink, Pencil, Trash2, TrendingUp } from 'lucide-react'
 
 const EMPTY = { nome: '', company_id: '' }
 
@@ -101,25 +101,35 @@ export default function LojasClient({ lojas: inicial, empresas, profile, limiteL
             {lojas.length} loja{lojas.length !== 1 ? 's' : ''} cadastrada{lojas.length !== 1 ? 's' : ''}
             {limiteLojas !== null && (
               <span className="ml-2 text-xs text-slate-600">
-                ({lojas.length}/{limiteLojas} do plano {plano})
+                ({lojas.length}/{limiteLojas} no plano {plano})
               </span>
             )}
           </p>
         </div>
-        <div className="flex flex-col items-end gap-1">
-          <button onClick={openCreate} disabled={atingiuLimite}
-            className="flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white text-sm font-medium px-4 py-2.5 rounded-xl transition-colors disabled:opacity-40 disabled:cursor-not-allowed">
-            <Plus size={16} />
-            Nova loja
-          </button>
-          {atingiuLimite && (
-            <p className="text-xs text-amber-400">
-              Limite atingido —{' '}
-              <a href="/planos" className="underline hover:text-amber-300">faça upgrade</a>
-            </p>
-          )}
-        </div>
+        <button onClick={openCreate} disabled={atingiuLimite}
+          className="flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white text-sm font-medium px-4 py-2.5 rounded-xl transition-colors disabled:opacity-40 disabled:cursor-not-allowed">
+          <Plus size={16} />
+          Nova loja
+        </button>
       </div>
+
+      {/* Banner de limite atingido */}
+      {atingiuLimite && (
+        <div className="flex items-center justify-between bg-amber-500/10 border border-amber-500/20 rounded-xl px-4 py-3 mb-6">
+          <div className="flex items-center gap-3">
+            <TrendingUp size={18} className="text-amber-400 flex-shrink-0" />
+            <div>
+              <p className="text-sm font-medium text-amber-300">Limite do plano {plano} atingido</p>
+              <p className="text-xs text-amber-400/70 mt-0.5">Você usou {lojas.length} de {limiteLojas} loja{limiteLojas > 1 ? 's' : ''} disponíveis.</p>
+            </div>
+          </div>
+          <a href="/planos"
+            className="flex items-center gap-1.5 bg-amber-500 hover:bg-amber-400 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition flex-shrink-0">
+            <TrendingUp size={13} />
+            Fazer upgrade
+          </a>
+        </div>
+      )}
 
       {/* Modal criar/editar */}
       {showForm && (
