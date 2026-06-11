@@ -334,8 +334,9 @@ export default function UsuariosClient({ usuarios: inicial, empresas, lojas, pro
                         className="p-1.5 text-slate-500 hover:text-blue-400 hover:bg-blue-500/10 rounded-lg transition-colors disabled:opacity-30 disabled:cursor-not-allowed">
                         <Pencil size={14} />
                       </button>
-                      <button onClick={() => setShowConfirm(u.id)}
-                        className="p-1.5 text-slate-500 hover:text-rose-400 hover:bg-rose-500/10 rounded-lg transition-colors">
+                      <button onClick={() => setShowConfirm(u.id)} disabled={isDemo}
+                        title={isDemo ? 'Indisponível na conta de demonstração' : undefined}
+                        className="p-1.5 text-slate-500 hover:text-rose-400 hover:bg-rose-500/10 rounded-lg transition-colors disabled:opacity-30 disabled:cursor-not-allowed">
                         <Trash2 size={14} />
                       </button>
                     </div>
