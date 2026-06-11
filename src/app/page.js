@@ -5,6 +5,7 @@ import {
 } from 'lucide-react'
 import PublicHeader from '@/components/PublicHeader'
 import PublicFooter from '@/components/PublicFooter'
+import DemoButton from '@/components/DemoButton'
 
 export const metadata = {
   title: 'VozCX: A voz do cliente transformada em resultados',
@@ -151,12 +152,7 @@ export default function LandingPage() {
             >
               Começar grátis sem cartão <ArrowRight size={16} />
             </Link>
-            <Link
-              href="/api/auth/demo"
-              className="inline-flex items-center justify-center gap-2 bg-white/5 hover:bg-white/10 text-white font-medium px-6 py-3 rounded-xl transition text-sm border border-white/10"
-            >
-              <Zap size={15} className="text-indigo-400" /> Ver demonstração
-            </Link>
+            <DemoButton />
           </div>
           <p className="text-slate-600 text-xs mt-4">Não cobraremos nada até o fim dos 30 dias de teste. Cancele quando quiser.</p>
         </div>
