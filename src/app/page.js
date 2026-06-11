@@ -134,26 +134,26 @@ export default function LandingPage() {
             </div>
             <span className="font-bold text-white text-lg">VozCX</span>
           </div>
-          <nav className="flex items-center gap-3">
-            <Link
-              href="/conheca-vozcx"
-              className="text-sm text-slate-400 hover:text-white transition px-3 py-1.5 hidden sm:block"
-            >
-              Sobre
+          <nav className="hidden md:flex items-center gap-1">
+            <Link href="/conheca-vozcx" className="text-sm text-slate-400 hover:text-white transition px-3 py-1.5 rounded-lg hover:bg-white/5">
+              Conheça a VozCX
             </Link>
-            <Link
-              href="/login"
-              className="text-sm text-slate-400 hover:text-white transition px-3 py-1.5"
-            >
+            <Link href="#funcionalidades" className="text-sm text-slate-400 hover:text-white transition px-3 py-1.5 rounded-lg hover:bg-white/5">
+              Funcionalidades
+            </Link>
+            <Link href="#planos" className="text-sm text-slate-400 hover:text-white transition px-3 py-1.5 rounded-lg hover:bg-white/5">
+              Planos
+            </Link>
+            <Link href="/login" className="text-sm text-slate-400 hover:text-white transition px-3 py-1.5 rounded-lg hover:bg-white/5">
               Entrar
             </Link>
-            <Link
-              href="/onboarding"
-              className="text-sm bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-4 py-1.5 rounded-lg transition"
-            >
-              Começar grátis
-            </Link>
           </nav>
+          <Link
+            href="/onboarding"
+            className="text-sm bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-4 py-2 rounded-lg transition"
+          >
+            Começar grátis
+          </Link>
         </div>
       </header>
 
@@ -226,7 +226,7 @@ export default function LandingPage() {
       </section>
 
       {/* ===== FEATURES ===== */}
-      <section className="py-24 px-4 sm:px-6 bg-[#0a0d14]">
+      <section id="funcionalidades" className="py-24 px-4 sm:px-6 bg-[#0a0d14]">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-14">
             <h2 className="text-3xl font-bold text-white mb-3">O que você ganha com a VozCX</h2>
@@ -287,7 +287,7 @@ export default function LandingPage() {
       </section>
 
       {/* ===== PRICING ===== */}
-      <section className="py-24 px-4 sm:px-6">
+      <section id="planos" className="py-24 px-4 sm:px-6">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-14">
             <h2 className="text-3xl font-bold text-white mb-3">Planos simples e transparentes</h2>
