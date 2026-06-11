@@ -24,7 +24,7 @@ function scoreLabel(n) {
   return { text: 'Detrator', color: 'text-rose-400' }
 }
 
-export default function PesquisaClient({ store_id, company_id, atendentes }) {
+export default function PesquisaClient({ store_id, company_id, atendentes, store_nome }) {
   const [score, setScore] = useState(null)
   const [attendant, setAttendant] = useState('')
   const [comment, setComment] = useState('')
@@ -83,11 +83,18 @@ export default function PesquisaClient({ store_id, company_id, atendentes }) {
   return (
     <div className="min-h-screen bg-[#0f1117] flex flex-col">
       {/* Header */}
-      <div className="flex items-center justify-center gap-2 pt-8 pb-4 px-4">
-        <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-          <BarChart3 size={15} className="text-white" />
+      <div className="flex flex-col items-center gap-1.5 pt-8 pb-4 px-4">
+        <div className="flex items-center gap-2">
+          <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+            <BarChart3 size={15} className="text-white" />
+          </div>
+          <span className="font-bold text-white text-lg">VozCX</span>
         </div>
-        <span className="font-bold text-white text-lg">VozCX</span>
+        {store_nome && (
+          <span className="text-xs text-slate-500 tracking-wide">
+            Unidade: <span className="text-slate-300 font-medium">{store_nome}</span>
+          </span>
+        )}
       </div>
 
       {/* Conteúdo */}

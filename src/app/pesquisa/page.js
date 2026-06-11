@@ -16,19 +16,26 @@ export default async function PesquisaPage({ searchParams }) {
 
   const supabase = await createClient()
 
-  // Busca atendentes e gerentes da loja
-  const { data: atendentes } = await supabase
-    .from('profiles')
-    .select('id, nome')
-    .eq('store_id', store_id)
-    .in('role', ['atendente', 'gerente'])
-    .order('nome')
+  const [{ data: atendentes }, { data: loja }] = await Promise.all([
+    supabase
+      .from('profiles')
+      .select('id, nome')
+      .eq('store_id', store_id)
+      .in('role', ['atendente', 'gerente'])
+      .order('nome'),
+    supabase
+      .from('stores')
+      .select('nome')
+      .eq('id', store_id)
+      .single(),
+  ])
 
   return (
     <PesquisaClient
       store_id={store_id}
       company_id={company_id}
       atendentes={atendentes ?? []}
+      store_nome={loja?.nome ?? null}
     />
   )
 }
