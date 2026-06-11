@@ -1,7 +1,7 @@
 import { getProfile } from '@/lib/auth'
 import { createClient } from '@/lib/supabase/server'
 import Sidebar from '@/components/Sidebar'
-import { AlertTriangle } from 'lucide-react'
+import { AlertTriangle, Zap } from 'lucide-react'
 
 async function getTrialInfo(companyId) {
   if (!companyId) return null
@@ -23,14 +23,37 @@ async function getTrialInfo(companyId) {
   return { diasRestantes: Math.max(diasRestantes, 0) }
 }
 
+async function getIsDemo() {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  return user?.email === 'demo@vozcx.com.br'
+}
+
 export default async function BackofficeLayout({ children }) {
   const profile = await getProfile()
-  const trialInfo = await getTrialInfo(profile.company_id)
+  const [trialInfo, isDemo] = await Promise.all([
+    getTrialInfo(profile.company_id),
+    getIsDemo(),
+  ])
 
   return (
     <div className="min-h-screen flex bg-[#0f1117]">
       <Sidebar profile={profile} />
       <div className="flex-1 flex flex-col min-w-0">
+        {isDemo && (
+          <div className="flex items-center justify-between bg-indigo-600/10 border-b border-indigo-600/20 px-4 sm:px-8 py-2.5">
+            <div className="flex items-center gap-2">
+              <Zap size={15} className="text-indigo-400 flex-shrink-0" />
+              <p className="text-xs text-indigo-300">
+                Você está explorando uma conta de demonstração. Os dados são fictícios e reiniciados a cada acesso.
+              </p>
+            </div>
+            <a href="/onboarding"
+              className="text-xs font-semibold text-indigo-400 hover:text-indigo-300 underline flex-shrink-0 ml-4">
+              Criar minha conta grátis
+            </a>
+          </div>
+        )}
         {trialInfo && (
           <div className="flex items-center justify-between bg-amber-500/10 border-b border-amber-500/20 px-4 sm:px-8 py-2.5">
             <div className="flex items-center gap-2">
