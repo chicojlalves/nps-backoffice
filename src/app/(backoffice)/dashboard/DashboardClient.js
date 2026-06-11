@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { TrendingUp, Users, ThumbsUp, ThumbsDown, RefreshCw } from 'lucide-react'
 import { LineChart, BarChart, DonutChart } from '@/components/Charts'
+import DemoTour from '@/components/DemoTour'
 
 function BloqueioUpgrade({ titulo, descricao }) {
   return (
@@ -43,7 +44,7 @@ function dateAgo(days) {
   return new Date(Date.now() - days * 24 * 60 * 60 * 1000).toISOString().slice(0, 10)
 }
 
-export default function DashboardClient({ profile, lojas, verRelatorioAtendente, verRelatorioLoja, verComentarios, plan }) {
+export default function DashboardClient({ profile, lojas, verRelatorioAtendente, verRelatorioLoja, verComentarios, plan, isDemo = false }) {
   const today = new Date().toISOString().slice(0, 10)
 
   const [from, setFrom] = useState(dateAgo(6))
@@ -98,7 +99,7 @@ export default function DashboardClient({ profile, lojas, verRelatorioAtendente,
   }
 
   return (
-    <div>
+    <div id="tour-dashboard">
       {/* Banner de upgrade concluído */}
       {showUpgradeBanner && (
         <div className="flex items-center justify-between bg-green-500/10 border border-green-500/20 rounded-xl px-4 py-3 mb-6">
@@ -205,7 +206,7 @@ export default function DashboardClient({ profile, lojas, verRelatorioAtendente,
       </div>
 
       {/* KPIs */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+      <div id="tour-kpis" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         {kpis.map(({ label, value, sub, icon: Icon, color }) => {
           const c = colorMap[color]
           return (
@@ -228,7 +229,7 @@ export default function DashboardClient({ profile, lojas, verRelatorioAtendente,
       </div>
 
       {/* Gráficos linha + donut */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
+      <div id="tour-evolucao" className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
         <div className="lg:col-span-2 bg-[#151820] border border-white/5 rounded-2xl p-6">
           <h3 className="text-sm font-semibold text-slate-300 mb-4">Evolução do NPS</h3>
           {!loading && data?.timeseries?.length > 0 ? (
@@ -260,7 +261,7 @@ export default function DashboardClient({ profile, lojas, verRelatorioAtendente,
 
       {/* NPS por atendente — Pro e Business */}
       {!loading && verRelatorioAtendente && data?.byAttendant?.length > 0 && (
-        <div className="bg-[#151820] border border-white/5 rounded-2xl p-6 mb-6">
+        <div id="tour-atendente" className="bg-[#151820] border border-white/5 rounded-2xl p-6 mb-6">
           <h3 className="text-sm font-semibold text-slate-300 mb-4">NPS por atendente</h3>
           <BarChart
             series={[{ name: 'NPS', data: data.byAttendant.map(a => a.nps) }]}
@@ -271,7 +272,7 @@ export default function DashboardClient({ profile, lojas, verRelatorioAtendente,
 
       {/* NPS por loja — Business */}
       {!loading && verRelatorioLoja && data?.byStore?.length > 0 && (
-        <div className="bg-[#151820] border border-white/5 rounded-2xl p-6 mb-6">
+        <div id="tour-loja" className="bg-[#151820] border border-white/5 rounded-2xl p-6 mb-6">
           <h3 className="text-sm font-semibold text-slate-300 mb-4">NPS por loja</h3>
           <BarChart
             series={[{ name: 'NPS', data: data.byStore.map(s => s.nps) }]}
@@ -288,9 +289,11 @@ export default function DashboardClient({ profile, lojas, verRelatorioAtendente,
         <BloqueioUpgrade titulo="NPS por loja" descricao="Disponível no plano Business." />
       )}
 
+      {isDemo && !loading && <DemoTour />}
+
       {/* Comentários — Pro e Business */}
       {!loading && verComentarios && data?.comments?.length > 0 && (
-        <div className="bg-[#151820] border border-white/5 rounded-2xl overflow-hidden mb-6">
+        <div id="tour-comentarios" className="bg-[#151820] border border-white/5 rounded-2xl overflow-hidden mb-6">
           <div className="px-6 py-4 border-b border-white/5">
             <h3 className="text-sm font-semibold text-slate-300">Últimos comentários</h3>
           </div>
