@@ -329,8 +329,9 @@ export default function UsuariosClient({ usuarios: inicial, empresas, lojas, pro
                   <td className="px-6 py-4 hidden md:table-cell text-sm text-slate-400">{u.stores?.nome ?? '–'}</td>
                   <td className="px-6 py-4 text-right">
                     <div className="flex items-center justify-end gap-2">
-                      <button onClick={() => openEdit(u)}
-                        className="p-1.5 text-slate-500 hover:text-blue-400 hover:bg-blue-500/10 rounded-lg transition-colors">
+                      <button onClick={() => openEdit(u)} disabled={isDemo}
+                        title={isDemo ? 'Indisponível na conta de demonstração' : undefined}
+                        className="p-1.5 text-slate-500 hover:text-blue-400 hover:bg-blue-500/10 rounded-lg transition-colors disabled:opacity-30 disabled:cursor-not-allowed">
                         <Pencil size={14} />
                       </button>
                       <button onClick={() => setShowConfirm(u.id)}

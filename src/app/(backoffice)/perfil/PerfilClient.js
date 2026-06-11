@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
-import { User, Lock, CheckCircle } from 'lucide-react'
+import { User, Lock, CheckCircle, ShieldAlert } from 'lucide-react'
 
 const roleColors = {
   admin:        'bg-blue-500/10 text-blue-400 border-blue-500/20',
@@ -12,7 +12,7 @@ const roleColors = {
   atendente:    'bg-slate-500/10 text-slate-400 border-slate-500/20',
 }
 
-export default function PerfilClient({ profile }) {
+export default function PerfilClient({ profile, isDemo = false }) {
   const initials = profile.nome.split(' ').slice(0, 2).map(n => n[0]).join('').toUpperCase()
 
   const [nome, setNome] = useState(profile.nome)
@@ -124,6 +124,14 @@ export default function PerfilClient({ profile }) {
         </div>
       </div>
 
+      {/* Aviso demo */}
+      {isDemo && (
+        <div className="flex items-center gap-3 bg-indigo-600/10 border border-indigo-600/20 rounded-2xl px-5 py-4 mb-4">
+          <ShieldAlert size={16} className="text-indigo-400 flex-shrink-0" />
+          <p className="text-sm text-indigo-300">Esta é uma conta de demonstração. A edição de nome e senha está desabilitada.</p>
+        </div>
+      )}
+
       {/* Alterar nome */}
       <div className="bg-[#151820] border border-white/5 rounded-2xl p-6 mb-4">
         <div className="flex items-center gap-2 mb-5">
@@ -138,7 +146,8 @@ export default function PerfilClient({ profile }) {
               value={nome}
               onChange={e => setNome(e.target.value)}
               placeholder="Seu nome"
-              className="bg-[#0f1117] border border-white/10 rounded-xl px-4 py-2.5 text-white placeholder-slate-600 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+              disabled={isDemo}
+              className="bg-[#0f1117] border border-white/10 rounded-xl px-4 py-2.5 text-white placeholder-slate-600 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition disabled:opacity-40 disabled:cursor-not-allowed"
             />
           </div>
 
@@ -153,8 +162,8 @@ export default function PerfilClient({ profile }) {
             </div>
           )}
 
-          <button type="submit" disabled={loadingNome || nome.trim() === profile.nome}
-            className="self-start bg-blue-600 hover:bg-blue-500 disabled:opacity-40 text-white font-semibold rounded-xl px-5 py-2.5 text-sm transition-colors">
+          <button type="submit" disabled={loadingNome || nome.trim() === profile.nome || isDemo}
+            className="self-start bg-blue-600 hover:bg-blue-500 disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold rounded-xl px-5 py-2.5 text-sm transition-colors">
             {loadingNome ? 'Salvando...' : 'Salvar nome'}
           </button>
         </form>
@@ -180,7 +189,8 @@ export default function PerfilClient({ profile }) {
                 value={value}
                 onChange={e => set(e.target.value)}
                 placeholder={hint ?? '••••••••'}
-                className="bg-[#0f1117] border border-white/10 rounded-xl px-4 py-2.5 text-white placeholder-slate-600 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+                disabled={isDemo}
+                className="bg-[#0f1117] border border-white/10 rounded-xl px-4 py-2.5 text-white placeholder-slate-600 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition disabled:opacity-40 disabled:cursor-not-allowed"
               />
             </div>
           ))}
@@ -196,8 +206,8 @@ export default function PerfilClient({ profile }) {
             </div>
           )}
 
-          <button type="submit" disabled={loadingSenha}
-            className="self-start bg-blue-600 hover:bg-blue-500 disabled:opacity-40 text-white font-semibold rounded-xl px-5 py-2.5 text-sm transition-colors">
+          <button type="submit" disabled={loadingSenha || isDemo}
+            className="self-start bg-blue-600 hover:bg-blue-500 disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold rounded-xl px-5 py-2.5 text-sm transition-colors">
             {loadingSenha ? 'Salvando...' : 'Alterar senha'}
           </button>
         </form>
