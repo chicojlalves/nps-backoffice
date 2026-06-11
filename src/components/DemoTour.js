@@ -36,7 +36,8 @@ const STEPS = [
   },
 ]
 
-const STORAGE_KEY = 'vozcx_demo_tour_done'
+// Chave inclui a data do dia — reseta o tour a cada novo dia (e a cada nova sessão demo)
+const STORAGE_KEY = `vozcx_demo_tour_${new Date().toISOString().slice(0, 10)}`
 
 export default function DemoTour() {
   const [step, setStep] = useState(0)

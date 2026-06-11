@@ -289,8 +289,6 @@ export default function DashboardClient({ profile, lojas, verRelatorioAtendente,
         <BloqueioUpgrade titulo="NPS por loja" descricao="Disponível no plano Business." />
       )}
 
-      {isDemo && !loading && <DemoTour />}
-
       {/* Comentários — Pro e Business */}
       {!loading && verComentarios && data?.comments?.length > 0 && (
         <div id="tour-comentarios" className="bg-[#151820] border border-white/5 rounded-2xl overflow-hidden mb-6">
@@ -324,6 +322,8 @@ export default function DashboardClient({ profile, lojas, verRelatorioAtendente,
           </table>
         </div>
       )}
+
+      {isDemo && !loading && <DemoTour />}
     </div>
   )
 }
