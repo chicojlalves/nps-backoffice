@@ -47,25 +47,40 @@ export default function DemoTour() {
 
   const updateRect = useCallback(() => {
     const el = document.getElementById(current.target)
-    if (el) setRect(el.getBoundingClientRect())
+    if (el) {
+      const r = el.getBoundingClientRect()
+      setRect({ top: r.top, left: r.left, width: r.width, height: r.height })
+    }
   }, [current.target])
 
+  const scrollToTarget = useCallback(() => {
+    const el = document.getElementById(current.target)
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+  }, [current.target])
+
+  // Inicia o tour após os dados carregarem
   useEffect(() => {
     if (sessionStorage.getItem(STORAGE_KEY)) return
-    // Aguarda os dados carregarem antes de iniciar
     const timer = setTimeout(() => {
       setVisible(true)
-      updateRect()
     }, 800)
     return () => clearTimeout(timer)
-  }, [updateRect])
+  }, [])
 
+  // Atualiza rect e scroll ao mudar step ou quando o tour fica visível
   useEffect(() => {
     if (!visible) return
-    updateRect()
+    // Pequeno delay para o scroll completar antes de calcular rect
+    const timer = setTimeout(() => {
+      updateRect()
+    }, 300)
+    scrollToTarget()
     window.addEventListener('resize', updateRect)
-    return () => window.removeEventListener('resize', updateRect)
-  }, [visible, step, updateRect])
+    return () => {
+      clearTimeout(timer)
+      window.removeEventListener('resize', updateRect)
+    }
+  }, [visible, step, updateRect, scrollToTarget])
 
   function close() {
     sessionStorage.setItem(STORAGE_KEY, '1')
@@ -84,45 +99,25 @@ export default function DemoTour() {
     if (step > 0) setStep(s => s - 1)
   }
 
-  function scrollToTarget() {
-    const el = document.getElementById(current.target)
-    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' })
-  }
-
-  useEffect(() => {
-    if (visible) scrollToTarget()
-  }, [step, visible])
-
   if (!visible || !rect) return null
 
   const padding = 8
-  const highlight = {
-    top: rect.top + window.scrollY - padding,
-    left: rect.left + window.scrollX - padding,
-    width: rect.width + padding * 2,
-    height: rect.height + padding * 2,
-  }
-
-  // Posiciona o tooltip abaixo ou acima dependendo do espaço
   const spaceBelow = window.innerHeight - rect.bottom
   const tooltipBelow = spaceBelow > 200
 
   return (
     <>
-      {/* Overlay escuro com "buraco" no elemento destacado via box-shadow */}
-      <div
-        className="fixed inset-0 z-40 pointer-events-none"
-        style={{ background: 'rgba(0,0,0,0.55)' }}
-      />
+      {/* Overlay */}
+      <div className="fixed inset-0 z-40 pointer-events-none" style={{ background: 'rgba(0,0,0,0.55)' }} />
 
-      {/* Highlight ring */}
+      {/* Spotlight ring */}
       <div
-        className="fixed z-50 pointer-events-none rounded-2xl"
+        className="fixed z-50 pointer-events-none"
         style={{
-          top: highlight.top - window.scrollY,
-          left: highlight.left - window.scrollX,
-          width: highlight.width,
-          height: highlight.height,
+          top: rect.top - padding,
+          left: rect.left - padding,
+          width: rect.width + padding * 2,
+          height: rect.height + padding * 2,
           boxShadow: '0 0 0 9999px rgba(0,0,0,0.55), 0 0 0 2px #6366f1',
           borderRadius: '1rem',
         }}
@@ -137,47 +132,37 @@ export default function DemoTour() {
             window.innerWidth - 336
           ),
           ...(tooltipBelow
-            ? { top: rect.bottom - window.scrollY + padding + 12 }
-            : { bottom: window.innerHeight - rect.top + window.scrollY + padding + 12 }),
+            ? { top: rect.bottom + padding + 12 }
+            : { bottom: window.innerHeight - rect.top + padding + 12 }),
         }}
       >
         <div className="bg-[#1a1d27] border border-indigo-500/30 rounded-2xl shadow-2xl shadow-black/50 p-5">
-          {/* Header */}
           <div className="flex items-start justify-between gap-3 mb-3">
             <div className="flex items-center gap-2">
               <span className="text-xl">{current.emoji}</span>
               <h3 className="text-sm font-bold text-white">{current.titulo}</h3>
             </div>
-            <button
-              onClick={close}
-              className="text-slate-500 hover:text-white transition-colors flex-shrink-0 mt-0.5"
-            >
+            <button onClick={close} className="text-slate-500 hover:text-white transition-colors flex-shrink-0 mt-0.5">
               <X size={14} />
             </button>
           </div>
 
-          {/* Mensagem */}
           <p className="text-slate-400 text-xs leading-relaxed mb-4">{current.mensagem}</p>
 
-          {/* Progresso + botões */}
           <div className="flex items-center justify-between gap-3">
-            {/* Dots */}
             <div className="flex items-center gap-1.5">
               {STEPS.map((_, i) => (
                 <div
                   key={i}
                   className={`rounded-full transition-all ${
-                    i === step
-                      ? 'w-4 h-1.5 bg-indigo-500'
-                      : i < step
-                      ? 'w-1.5 h-1.5 bg-indigo-500/40'
-                      : 'w-1.5 h-1.5 bg-white/10'
+                    i === step ? 'w-4 h-1.5 bg-indigo-500'
+                    : i < step ? 'w-1.5 h-1.5 bg-indigo-500/40'
+                    : 'w-1.5 h-1.5 bg-white/10'
                   }`}
                 />
               ))}
             </div>
 
-            {/* Botões */}
             <div className="flex items-center gap-2">
               {step > 0 && (
                 <button
@@ -191,11 +176,7 @@ export default function DemoTour() {
                 onClick={next}
                 className="flex items-center gap-1.5 text-xs font-semibold bg-indigo-600 hover:bg-indigo-500 text-white px-3 py-1.5 rounded-lg transition-colors"
               >
-                {step < STEPS.length - 1 ? (
-                  <>Próximo <ArrowRight size={12} /></>
-                ) : (
-                  <>Entendido! ✓</>
-                )}
+                {step < STEPS.length - 1 ? <><span>Próximo</span> <ArrowRight size={12} /></> : <span>Entendido! ✓</span>}
               </button>
             </div>
           </div>
