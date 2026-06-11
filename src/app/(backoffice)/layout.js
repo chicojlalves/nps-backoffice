@@ -41,17 +41,23 @@ export default async function BackofficeLayout({ children }) {
       <Sidebar profile={profile} />
       <div className="flex-1 flex flex-col min-w-0">
         {isDemo && (
-          <div className="flex items-center justify-between bg-indigo-600/10 border-b border-indigo-600/20 px-4 sm:px-8 py-2.5">
-            <div className="flex items-center gap-2">
+          <div className="flex items-center justify-between bg-indigo-600/10 border-b border-indigo-600/20 px-4 sm:px-8 py-2.5 gap-3">
+            <div className="flex items-center gap-2 min-w-0">
               <Zap size={15} className="text-indigo-400 flex-shrink-0" />
-              <p className="text-xs text-indigo-300">
+              <p className="text-xs text-indigo-300 truncate">
                 Você está explorando uma conta de demonstração. Os dados são fictícios e reiniciados a cada acesso.
               </p>
             </div>
-            <a href="/onboarding"
-              className="flex-shrink-0 ml-4 inline-flex items-center gap-1.5 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white text-xs font-semibold px-3.5 py-1.5 rounded-lg shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 transition-all animate-pulse hover:animate-none">
-              Criar minha conta grátis <ArrowRight size={12} />
-            </a>
+            <div className="flex items-center gap-2 flex-shrink-0">
+              <a href="/api/auth/demo-logout"
+                className="inline-flex items-center gap-1.5 text-xs text-slate-400 hover:text-white border border-white/10 hover:border-white/20 px-3 py-1.5 rounded-lg transition-all">
+                Finalizar demo
+              </a>
+              <a href="/onboarding"
+                className="inline-flex items-center gap-1.5 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white text-xs font-semibold px-3.5 py-1.5 rounded-lg shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 transition-all animate-pulse hover:animate-none">
+                Criar minha conta grátis <ArrowRight size={12} />
+              </a>
+            </div>
           </div>
         )}
         {trialInfo && (
