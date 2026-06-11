@@ -1,7 +1,7 @@
 import { getProfile } from '@/lib/auth'
 import { createClient } from '@/lib/supabase/server'
 import Sidebar from '@/components/Sidebar'
-import { AlertTriangle, Zap } from 'lucide-react'
+import { AlertTriangle, Zap, ArrowRight } from 'lucide-react'
 
 async function getTrialInfo(companyId) {
   if (!companyId) return null
@@ -49,8 +49,8 @@ export default async function BackofficeLayout({ children }) {
               </p>
             </div>
             <a href="/onboarding"
-              className="text-xs font-semibold text-indigo-400 hover:text-indigo-300 underline flex-shrink-0 ml-4">
-              Criar minha conta grátis
+              className="flex-shrink-0 ml-4 inline-flex items-center gap-1.5 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white text-xs font-semibold px-3.5 py-1.5 rounded-lg shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 transition-all animate-pulse hover:animate-none">
+              Criar minha conta grátis <ArrowRight size={12} />
             </a>
           </div>
         )}
