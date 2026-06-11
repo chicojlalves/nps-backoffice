@@ -22,6 +22,9 @@ export default function PublicFooter() {
             <Link href="/contato" className="text-slate-500 hover:text-white text-sm transition">
               Contato
             </Link>
+            <Link href="/faq" className="text-slate-500 hover:text-white text-sm transition">
+              FAQ
+            </Link>
             <Link href="/termos-de-uso" className="text-slate-500 hover:text-white text-sm transition">
               Termos de Uso
             </Link>
