@@ -21,16 +21,15 @@ export default function PublicHeader() {
           <Link href="/#planos" className="text-sm text-slate-400 hover:text-white transition px-3 py-1.5 rounded-lg hover:bg-white/5">
             Planos
           </Link>
-          <Link href="/login" className="text-sm text-slate-400 hover:text-white transition px-3 py-1.5 rounded-lg hover:bg-white/5">
+        </nav>
+        <div className="flex items-center gap-2">
+          <Link href="/login" className="text-sm text-slate-400 hover:text-white border border-white/10 hover:border-white/20 px-4 py-2 rounded-lg transition">
             Entrar
           </Link>
-        </nav>
-        <Link
-          href="/onboarding"
-          className="text-sm bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-4 py-2 rounded-lg transition"
-        >
-          Começar grátis
-        </Link>
+          <Link href="/onboarding" className="text-sm bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-4 py-2 rounded-lg transition">
+            Começar grátis
+          </Link>
+        </div>
       </div>
     </header>
   )
