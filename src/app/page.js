@@ -136,6 +136,12 @@ export default function LandingPage() {
           </div>
           <nav className="flex items-center gap-3">
             <Link
+              href="/conheca-vozcx"
+              className="text-sm text-slate-400 hover:text-white transition px-3 py-1.5 hidden sm:block"
+            >
+              Sobre
+            </Link>
+            <Link
               href="/login"
               className="text-sm text-slate-400 hover:text-white transition px-3 py-1.5"
             >
@@ -418,14 +424,17 @@ export default function LandingPage() {
             <span className="text-sm font-semibold text-white">VozCX</span>
           </div>
           <div className="flex items-center gap-6">
+            <Link href="/conheca-vozcx" className="text-slate-500 hover:text-white text-sm transition">
+              Sobre
+            </Link>
+            <Link href="/planos" className="text-slate-500 hover:text-white text-sm transition">
+              Planos
+            </Link>
             <Link href="/onboarding" className="text-slate-500 hover:text-white text-sm transition">
               Cadastro
             </Link>
             <Link href="/login" className="text-slate-500 hover:text-white text-sm transition">
               Login
-            </Link>
-            <Link href="/planos" className="text-slate-500 hover:text-white text-sm transition">
-              Planos
             </Link>
           </div>
           <p className="text-slate-600 text-xs">© 2026 VozCX. Todos os direitos reservados.</p>
