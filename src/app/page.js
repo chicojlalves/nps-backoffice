@@ -3,6 +3,8 @@ import {
   BarChart3, QrCode, Users, ShieldCheck,
   TrendingUp, Star, ArrowRight, Check, Zap, Building2
 } from 'lucide-react'
+import PublicHeader from '@/components/PublicHeader'
+import PublicFooter from '@/components/PublicFooter'
 
 export const metadata = {
   title: 'VozCX: A voz do cliente transformada em resultados',
@@ -125,37 +127,7 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen bg-[#0f1117] text-white">
 
-      {/* ===== HEADER ===== */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-[#0f1117]/80 backdrop-blur-md border-b border-white/5">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <div className="w-10 h-10 bg-indigo-600 rounded-lg flex items-center justify-center">
-              <BarChart3 size={20} className="text-white" />
-            </div>
-            <span className="font-bold text-white text-lg">VozCX</span>
-          </div>
-          <nav className="hidden md:flex items-center gap-1">
-            <Link href="/conheca-vozcx" className="text-sm text-slate-400 hover:text-white transition px-3 py-1.5 rounded-lg hover:bg-white/5">
-              Conheça a VozCX
-            </Link>
-            <Link href="#funcionalidades" className="text-sm text-slate-400 hover:text-white transition px-3 py-1.5 rounded-lg hover:bg-white/5">
-              Funcionalidades
-            </Link>
-            <Link href="#planos" className="text-sm text-slate-400 hover:text-white transition px-3 py-1.5 rounded-lg hover:bg-white/5">
-              Planos
-            </Link>
-            <Link href="/login" className="text-sm text-slate-400 hover:text-white transition px-3 py-1.5 rounded-lg hover:bg-white/5">
-              Entrar
-            </Link>
-          </nav>
-          <Link
-            href="/onboarding"
-            className="text-sm bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-4 py-2 rounded-lg transition"
-          >
-            Começar grátis
-          </Link>
-        </div>
-      </header>
+      <PublicHeader />
 
       {/* ===== HERO ===== */}
       <section className="pt-40 pb-24 px-4 sm:px-6 text-center">
@@ -414,32 +386,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ===== FOOTER ===== */}
-      <footer className="border-t border-white/5 py-8 px-4 sm:px-6">
-        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
-            <div className="w-6 h-6 bg-indigo-600 rounded-md flex items-center justify-center">
-              <BarChart3 size={12} className="text-white" />
-            </div>
-            <span className="text-sm font-semibold text-white">VozCX</span>
-          </div>
-          <div className="flex items-center gap-6">
-            <Link href="/conheca-vozcx" className="text-slate-500 hover:text-white text-sm transition">
-              Sobre
-            </Link>
-            <Link href="/planos" className="text-slate-500 hover:text-white text-sm transition">
-              Planos
-            </Link>
-            <Link href="/onboarding" className="text-slate-500 hover:text-white text-sm transition">
-              Cadastro
-            </Link>
-            <Link href="/login" className="text-slate-500 hover:text-white text-sm transition">
-              Login
-            </Link>
-          </div>
-          <p className="text-slate-600 text-xs">© 2026 VozCX. Todos os direitos reservados.</p>
-        </div>
-      </footer>
+      <PublicFooter />
 
     </div>
   )

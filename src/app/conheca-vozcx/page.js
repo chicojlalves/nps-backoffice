@@ -1,5 +1,7 @@
 import Link from 'next/link'
-import { BarChart3, ArrowRight, Zap, Eye, TrendingUp, Heart } from 'lucide-react'
+import { ArrowRight, Zap, Eye, TrendingUp, Heart } from 'lucide-react'
+import PublicHeader from '@/components/PublicHeader'
+import PublicFooter from '@/components/PublicFooter'
 
 export const metadata = {
   title: 'Conheça a VozCX — Empresas melhores começam ouvindo seus clientes',
@@ -33,25 +35,7 @@ export default function ConhecaVozCX() {
   return (
     <div className="min-h-screen bg-[#0f1117] text-white">
 
-      {/* ===== HEADER ===== */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-[#0f1117]/80 backdrop-blur-md border-b border-white/5">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2.5">
-            <div className="w-10 h-10 bg-indigo-600 rounded-lg flex items-center justify-center">
-              <BarChart3 size={20} className="text-white" />
-            </div>
-            <span className="font-bold text-white text-lg">VozCX</span>
-          </Link>
-          <nav className="flex items-center gap-3">
-            <Link href="/login" className="text-sm text-slate-400 hover:text-white transition px-3 py-1.5">
-              Entrar
-            </Link>
-            <Link href="/onboarding" className="text-sm bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-4 py-1.5 rounded-lg transition">
-              Começar grátis
-            </Link>
-          </nav>
-        </div>
-      </header>
+      <PublicHeader />
 
       {/* ===== HERO ===== */}
       <section className="pt-48 pb-24 px-4 sm:px-6 text-center">
@@ -183,22 +167,7 @@ export default function ConhecaVozCX() {
         </div>
       </section>
 
-      {/* ===== FOOTER ===== */}
-      <footer className="border-t border-white/5 py-10 px-4 sm:px-6">
-        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6">
-          <div className="flex items-center gap-2">
-            <div className="w-7 h-7 bg-indigo-600 rounded-md flex items-center justify-center">
-              <BarChart3 size={13} className="text-white" />
-            </div>
-            <span className="text-sm font-semibold text-white">VozCX</span>
-          </div>
-          <div className="text-center">
-            <p className="text-slate-500 text-sm">Fundada no Brasil.</p>
-            <p className="text-slate-600 text-xs mt-1">Desenvolvida por quem acredita que a tecnologia deve aproximar empresas e clientes.</p>
-          </div>
-          <p className="text-slate-600 text-xs">© 2026 VozCX. Todos os direitos reservados.</p>
-        </div>
-      </footer>
+      <PublicFooter />
 
     </div>
   )
