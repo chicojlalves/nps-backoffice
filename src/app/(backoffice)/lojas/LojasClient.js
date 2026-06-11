@@ -6,7 +6,7 @@ import { Store, Plus, X, QrCode, ExternalLink, Pencil, Trash2, TrendingUp } from
 
 const EMPTY = { nome: '', company_id: '' }
 
-export default function LojasClient({ lojas: inicial, empresas, profile, limiteLojas, plano }) {
+export default function LojasClient({ lojas: inicial, empresas, profile, limiteLojas, plano, isDemo = false }) {
   const [lojas, setLojas] = useState(inicial)
   const [showForm, setShowForm] = useState(false)
   const [editing, setEditing] = useState(null)
@@ -110,7 +110,8 @@ export default function LojasClient({ lojas: inicial, empresas, profile, limiteL
             )}
           </p>
         </div>
-        <button onClick={openCreate} disabled={atingiuLimite}
+        <button onClick={openCreate} disabled={atingiuLimite || isDemo}
+          title={isDemo ? 'Indisponível na conta de demonstração' : undefined}
           className="flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white text-sm font-medium px-4 py-2.5 rounded-xl transition-colors disabled:opacity-40 disabled:cursor-not-allowed">
           <Plus size={16} />
           Nova loja

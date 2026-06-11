@@ -152,10 +152,10 @@ export default function LandingPage() {
               Começar grátis sem cartão <ArrowRight size={16} />
             </Link>
             <Link
-              href="/login"
+              href="/api/auth/demo"
               className="inline-flex items-center justify-center gap-2 bg-white/5 hover:bg-white/10 text-white font-medium px-6 py-3 rounded-xl transition text-sm border border-white/10"
             >
-              Já tenho uma conta
+              <Zap size={15} className="text-indigo-400" /> Ver demonstração
             </Link>
           </div>
           <p className="text-slate-600 text-xs mt-4">Não cobraremos nada até o fim dos 30 dias de teste. Cancele quando quiser.</p>

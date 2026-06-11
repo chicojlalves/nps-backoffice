@@ -27,7 +27,7 @@ const roleColors = {
 
 const EMPTY_FORM = { nome: '', email: '', senha: '', role: '', company_id: '', store_id: '' }
 
-export default function UsuariosClient({ usuarios: inicial, empresas, lojas, profile, limiteUsuarios, plano }) {
+export default function UsuariosClient({ usuarios: inicial, empresas, lojas, profile, limiteUsuarios, plano, isDemo = false }) {
   const [usuarios, setUsuarios] = useState(inicial)
   const [showForm, setShowForm] = useState(false)
   const [editing, setEditing] = useState(null)
@@ -154,7 +154,8 @@ export default function UsuariosClient({ usuarios: inicial, empresas, lojas, pro
             )}
           </p>
         </div>
-        <button onClick={openCreate} disabled={atingiuLimite}
+        <button onClick={openCreate} disabled={atingiuLimite || isDemo}
+          title={isDemo ? 'Indisponível na conta de demonstração' : undefined}
           className="flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white text-sm font-medium px-4 py-2.5 rounded-xl transition-colors disabled:opacity-40 disabled:cursor-not-allowed">
           <Plus size={16} />
           Novo usuário

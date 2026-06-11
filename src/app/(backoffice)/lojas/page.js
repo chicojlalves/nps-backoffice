@@ -12,14 +12,16 @@ export default async function LojasPage() {
 
   const supabase = await createClient()
 
-  const [{ data: lojas }, { data: empresas }, { data: company }] = await Promise.all([
+  const [{ data: lojas }, { data: empresas }, { data: company }, { data: { user } }] = await Promise.all([
     supabase.from('stores').select('*, companies(nome)').order('created_at', { ascending: false }),
     supabase.from('companies').select('id, nome').order('nome'),
     supabase.from('companies').select('plan').eq('id', profile.company_id).single(),
+    supabase.auth.getUser(),
   ])
 
   const plano = company?.plan ?? 'free'
   const limiteLojas = profile.role === 'admin' ? null : (plano in LIMITE_PLANO ? LIMITE_PLANO[plano] : 1)
+  const isDemo = user?.email === 'demo@vozcx.com.br'
 
   return (
     <LojasClient
@@ -28,6 +30,7 @@ export default async function LojasPage() {
       profile={profile}
       limiteLojas={limiteLojas}
       plano={plano}
+      isDemo={isDemo}
     />
   )
 }

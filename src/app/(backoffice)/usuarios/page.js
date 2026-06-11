@@ -21,6 +21,8 @@ export default async function UsuariosPage() {
 
   const plano = company?.plan ?? 'free'
   const limiteUsuarios = profile.role === 'admin' ? null : (plano in LIMITE_USUARIOS ? LIMITE_USUARIOS[plano] : 3)
+  const { data: { user } } = await supabase.auth.getUser()
+  const isDemo = user?.email === 'demo@vozcx.com.br'
 
   return (
     <UsuariosClient
@@ -30,6 +32,7 @@ export default async function UsuariosPage() {
       profile={profile}
       limiteUsuarios={limiteUsuarios}
       plano={plano}
+      isDemo={isDemo}
     />
   )
 }
